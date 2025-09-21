@@ -1,0 +1,47 @@
+@using GotHome.ViewModels
+
+@model LoginFormViewModel
+@{
+    ViewData["Title"] = "Log In";
+    var error = Model.Error;
+}
+
+<h1 class="display-2">Log In</h1>
+
+@if (error is not null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span>You have been successfully logged out.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card p-3 shadow-lg" style="max-width: 740px">
+    <div class="row g-0">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h2 class="card-title">Log In</h2>
+                <form asp-action="ProcessLoginForm" asp-controller="Account" method="post">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email<span style="color: red;">*</span>:</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="form-text text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password<span style="color: red;">*</span>:</label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="form-text text-danger"></span>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+       <div class="col-md-4">
+            <img src="/images/Subject2.png" alt="logo" class="img-fluid h-100 ww-100 object-fit-contain" style="max-width: 250px;">
+        </div> 
+    </div>
+</div>
