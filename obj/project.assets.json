@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/Users/janiceaine/.nuget/packages/": {}
+    "/Users/janiswint/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/janiceaine/GotHome/GotHome.csproj",
+      "projectUniqueName": "/Users/janiswint/Documents/capstone-WOS/GotHome/GotHome.csproj",
       "projectName": "GotHome",
-      "projectPath": "/Users/janiceaine/GotHome/GotHome.csproj",
-      "packagesPath": "/Users/janiceaine/.nuget/packages/",
-      "outputPath": "/Users/janiceaine/GotHome/obj/",
+      "projectPath": "/Users/janiswint/Documents/capstone-WOS/GotHome/GotHome.csproj",
+      "packagesPath": "/Users/janiswint/.nuget/packages/",
+      "outputPath": "/Users/janiswint/Documents/capstone-WOS/GotHome/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/janiceaine/.nuget/NuGet/NuGet.Config"
+        "/Users/janiswint/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -67,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/janiceaine/.dotnet/sdk/8.0.413/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
