@@ -1,0 +1,9 @@
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.csproj.AssemblyReference.cache
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.GeneratedMSBuildEditorConfig.editorconfig
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.AssemblyInfoInputs.cache
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.AssemblyInfo.cs
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.csproj.CoreCompileInputs.cache
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.MvcApplicationPartsAssemblyInfo.cache
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.RazorAssemblyInfo.cache
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.RazorAssemblyInfo.cs
+/Users/janiceaine/GotHome/obj/Debug/net8.0/GotHome.sourcelink.json

@@ -1,0 +1,45 @@
+@model RegisterFormViewModel
+
+@{
+    ViewData[index: "Title"] = "Register";
+
+}
+
+<h1 class="display-2">Register</h1>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<div class="card shadow-lg" style="max-width: 720px">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-controller="Account" asp-action="ProcessRegister" method="post">
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label">UserName<span style="color: red;">*</span>:</label>
+                <input asp-for="UserName" class="form-control" />
+                <span class="form-text text-danger" asp-validation-for="UserName"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email<span style="color: red;">*</span>:</label>
+                <input asp-for="Email" class="form-control" />
+                <span class="form-text text-danger" asp-validation-for="Email"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password<span style="color: red;">*</span>:</label>
+                <input asp-for="Password" class="form-control" />
+                <span class="form-text text-danger" asp-validation-for="Password"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label">Confirm Password<span
+                        style="color: red;">*</span>:</label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span class="form-text text-danger" asp-validation-for="ConfirmPassword"></span>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Sign up</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <p class="mb-0 text-muted">Already registered? <a href="/account/login">Log in here.</a></p>
+    </div>
+</div>

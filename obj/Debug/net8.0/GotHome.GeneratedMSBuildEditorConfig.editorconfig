@@ -18,6 +18,38 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /Users/janiceaine/GotHome
 build_property._RazorSourceGeneratorDebug = 
 
+[/Users/janiceaine/GotHome/Views/Account/ConfirmLogout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Db25maXJtTG9nb3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Account/LoginForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbkZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Account/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Qcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Account/RegisterForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3RlckZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Error/Forbidden.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXJyb3IvRm9yYmlkZGVuLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Error/PageNotFound.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXJyb3IvUGFnZU5vdEZvdW5kLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Error/ServerError.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXJyb3IvU2VydmVyRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Error/Unauthorized.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXJyb3IvVW5hdXRob3JpemVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/janiceaine/GotHome/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -28,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [/Users/janiceaine/GotHome/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/janiceaine/GotHome/Views/Shared/_Navbar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19OYXZiYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/janiceaine/GotHome/Views/Shared/_ValidationScriptsPartial.cshtml]
