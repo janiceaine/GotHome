@@ -1,0 +1,26 @@
+
+@model UserJokeStatsViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    var joke = Model;
+}
+
+<h1 class="display-4">Profile</h1>
+
+<div class="card mb-3" style="max-width: 640px;">
+    <div class="row g-0 align-items-center">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5><strong>Username:</strong> @joke.UserName</h5>
+                <h5><strong>E-mail:</strong> @joke.Email</h5>
+                <br />
+                <p><strong>Jokes added:</strong> @joke.JokesCount</p>
+                <p><strong>Jokes rated:</strong> @joke.JokesRated</p>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-center">
+            <img src="/images/groan2.png" alt="logo" class="img-fluid object-fit-contain" style="max-width: 250px;">
+        </div>
+    </div>
+</div>

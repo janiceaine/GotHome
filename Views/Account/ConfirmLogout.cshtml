@@ -1,0 +1,10 @@
+@{
+    ViewData[index: "Title"] = "Confirm Logout";
+}
+
+<h1 class="display-4">Confirm Logout</h1>
+<p class="lead">Are you sure you want to Log out?</p>
+
+<form asp-action="Logout" asp-controller="Account" method="post">
+    <button type="submit" class="btn btn-outline-primary">Log Out</button>
+</form>
