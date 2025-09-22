@@ -2,7 +2,111 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center display-1 m-3">
+    <img src="/images/gothome2.png" alt="GotHome" width="400" />
 </div>
+
+<style>
+    body {
+        background-image:
+            url('/images/backg2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #f5f5f5;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero {
+        padding: 16rem 2rem;
+        text-align: center;
+        background: url('/images/ratioed.png') no-repeat center center;
+        background-size: contain;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 300;
+        color: #ffffff;
+    }
+
+    .hero p {
+        font-size: 1.25rem;
+        color: #cccccc;
+    }
+
+    .btn-custom {
+        background-color: #d94fcf;
+        border-radius: 50px;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        border: none;
+    }
+
+    .feature-card {
+        background-color: #1f1f1f;
+        border-radius: 1rem;
+        padding: 2rem;
+        color: #e0e0e0;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .footer {
+        background-color: #0a0a0a;
+        padding: 2rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #888;
+    }
+</style>
+
+<section class="hero">
+    <h1>You made it home. Let them know.</h1>
+    <p class="mt-3">GotHome sends a gentle ping to your crew when you arrive safely.</p>
+    <a href="#features" class="btn btn-custom mt-4">Get Started</a>
+</section>
+
+<section id="features" class="container py-5">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <div class="mb-2">🏠</div>
+                <h5>One-Tap Check-In</h5>
+                <p>Just open the app and we’ll do the rest.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <div class="mb-2">🏠</div>
+                <h5>One-Tap Check-In</h5>
+                <p>Just open the app and we’ll do the rest.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <div class="mb-2">🏠</div>
+                <h5>One-Tap Check-In</h5>
+                <p>Just open the app and we’ll do the rest.</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="feature-card text-center">
+                <div class="mb-2">🏠</div>
+                <h5>One-Tap Check-In</h5>
+                <p>Just open the app and we’ll do the rest.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container py-5 text-center">
+    <h2 class="mb-4">Designed for nights out, built for peace of mind.</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <img src="/images/visual.png" class="img-fluid rounded shadow" />
+        </div>
+        <div class="col-md-5">
+            <img src="/images/imgae.png" class="img-fluid rounded shadow" />
+        </div>
+    </div>
+</section>
