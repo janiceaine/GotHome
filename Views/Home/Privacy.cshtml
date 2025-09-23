@@ -11,7 +11,15 @@
 
 @section Scripts {
     <script type="module">
-        import { initMap } from '/js/map.js';
-        initMap('@Model.GoogleMapsAPIKey');
+        import { loadGoogleMaps, addMarker } from '/js/map.js';
+
+        (async () => {
+            const apiKey = '@Model.GoogleMapsAPIKey';
+            await loadGoogleMaps(apiKey);
+
+            // Example: add home and destination markers dynamically
+            addMarker(32.5358053807361, -97.09577927978566, "green","Home"); // home
+            addMarker(32.747519, -97.092994, "orange","Event location"); // destination
+        })();
     </script>
 }
