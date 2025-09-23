@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 builder.Services.AddScoped<IPasswordService, BcryptPasswordService>();
+builder.Services.AddScoped<IImageService, ImageKitService>();
 builder.Services.AddDbContext<ApplicationContext>(
     (options) =>
     {

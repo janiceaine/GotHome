@@ -1,0 +1,20 @@
+@model ProfileViewModel
+@{
+    var profile = Model;
+}
+
+<div class="card shadow">
+    <div class="card-header position-relative px-3 py-5 bg-primary">
+        <img style="width: 5rem; top: 3rem; width: 120px; height: 120px; object-fit: cover;" class="rounded position-absolute" src="@profile.ProfileImageUrl"
+            alt="@profile.UserName" />
+    </div>
+    <div class="card-body pt-5">
+        <h3 class="card-title">@profile.UserName</h3>
+        <p class=" card-text">
+            <strong>Email: </strong> @profile.Email<br />
+            <strong>Join Date: </strong> @profile.JoinDate<br />
+            <strong>Name: </strong> @profile.FullName<br />
+            <strong>Location: </strong> @profile.Location<br /><br />
+        </p>
+    </div>
+</div>

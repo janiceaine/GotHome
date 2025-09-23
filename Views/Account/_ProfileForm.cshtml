@@ -1,0 +1,37 @@
+@model ProfileFormViewModel
+
+<div class="card shadow">
+    <div class="card-header">
+        <h2 class="display-6 m-0">Edit Profile</h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="UpdateProfile" asp-controller="Account" method="POST" enctype="multipart/form-data">
+            <input type="hidden" asp-for="UserId" value="@Model.UserId">
+            <div class="row mb-3">
+                <div class="col">
+                    <label asp-for="FirstName" class="form-label">First name:</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="First name:">
+                    <span asp-validation-for="FirstName" class="form-text text-danger"></span>
+                </div>
+                <div class="col">
+                    <label asp-for="LastName" class="form-label">Last name:</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Last name:">
+                    <span asp-validation-for="LastName" class="form-text text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label">Location:</label>
+                <input asp-for="Location" class="form-control" placeholder="Location:">
+                <span asp-validation-for="Location" class="form-text text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProfileImage" class="form-label">Upload your profile image:</label>
+                <input asp-for="ProfileImage" type="file" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp">
+                <span asp-validation-for="ProfileImage" class="form-text text-danger"></span>
+            </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Edit profile</button>
+            </div>
+        </form>
+    </div>
+</div>
