@@ -74,7 +74,7 @@ public class AccountController : Controller
         HttpContext.Session.SetInt32(SessionUserId, newUser.Id);
 
         // Redirects to Home or Dashboard
-        return RedirectToAction("EventsIndex", "Events");
+        return RedirectToAction("EditProfile", "Account");
     }
 
     [HttpGet("login")]
