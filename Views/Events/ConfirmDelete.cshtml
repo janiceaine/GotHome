@@ -1,0 +1,17 @@
+@model ConfirmDeleteViewModel
+
+<div class="card shadow my-4">
+    <div class="card-header">
+        <h2 class="display-6 m-0">Confirm Delete</h2>
+    </div>
+    <div class="card-body">
+        <p>Are you sure you want to delete this event? This action cannot be undone.</p>
+        <form asp-action="DeleteEvent" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="d-flex justify-content-end">
+                <a asp-action="EventDetails" asp-route-id="@Model.Id" class="btn btn-outline-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete Event</button>
+            </div>
+        </form>
+    </div>
+</div>

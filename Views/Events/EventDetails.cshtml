@@ -1,0 +1,64 @@
+@model EventDetailsViewModel
+
+<div class="card shadow my-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="display-6 m-0">@Model.Title</h2>
+        <div>
+            <a asp-action="EditEvent" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit</a>
+            <a asp-action="ConfirmDelete" asp-route-id="@Model.Id" class="btn btn-outline-danger">Delete</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <p><strong>Description:</strong> @Model.Description</p>
+        <p><strong>Location:</strong> @Model.Location</p>
+        <p><strong>Start Time:</strong> @Model.StartTime.ToString("MMMM dd, yyyy HH:mm")</p>
+        <p><strong>Uploaded By:</strong> @Model.UploadedBy</p>
+
+        <hr />
+
+        <h5>Invitees</h5>
+        @if (Model.Invitees.Any())
+        {
+            <ul>
+                @foreach (var i in Model.Invitees)
+                {
+                    <li>@i</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No invites yet.</p>
+        }
+
+        <h5>RSVPs</h5>
+        @if (Model.RSVPs.Any())
+        {
+            <ul>
+                @foreach (var r in Model.RSVPs)
+                {
+                    <li>@r</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No RSVPs yet.</p>
+        }
+
+        <h5>Location Pings</h5>
+        @if (Model.LocationPings.Any())
+        {
+            <ul>
+                @foreach (var p in Model.LocationPings)
+                {
+                    <li>@p.User?.UserName: (@p.Latitude, @p.Longitude) at @p.Timestamp.ToString("g")</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No location pings yet.</p>
+        }
+    </div>
+</div>

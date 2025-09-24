@@ -1,0 +1,25 @@
+@model EventsIndexViewModel
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="display-6">Events</h2>
+        <a asp-action="NewEventsForm" class="btn btn-primary">+ New Event</a>
+    </div>
+
+    <div class="row g-3">
+        @foreach (var e in Model.Events)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@e.Title</h5>
+                        <p class="card-text mb-1">Uploaded by: <strong>@e.UploadedBy</strong></p>
+                        <p class="card-text mb-1">Invites: <strong>@e.InviteCount</strong></p>
+                        <p class="card-text text-muted mb-2">@e.CreateDate</p>
+                        <a asp-action="EventDetails" asp-route-id="@e.Id" class="mt-auto btn btn-outline-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
