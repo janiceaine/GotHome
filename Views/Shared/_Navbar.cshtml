@@ -1,32 +1,64 @@
-<nav class="navbar navbar-expand-lg navbar-dark border-bottom">
-  <div class="container ">
-    <a class="navbar-brand " asp-controller="Home" asp-action="Index">
-      <img src="/images/theicon.png" alt="GotHome" width="32" />
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+  var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("userId");
+  var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName");
+  var profileImage = HttpContextAccessor.HttpContext?.Session.GetString("ProfileImage") ?? "/images/default-avatar.jpg";
+}
+
+<nav class="navbar navbar-expand-lg navbar-dark border-bottom shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+      <img src="/images/theicon.png" alt="GotHome" width="32" class="me-2" />
       <img src="/images/gothomeicon.png" alt="GotHome" width="128" />
     </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav align-items-lg-center">
         <li class="nav-item">
           <a class="nav-link" href="#features">How It Works</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" asp-controller="Events" asp-action="Create">Create Event</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" asp-controller="Invite" asp-action="Send">Invite Crew</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" asp-controller="Location" asp-action="Track">Live Track</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" asp-controller="Account" asp-action="LoginForm">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-magenta text-light ms-3" asp-controller="Account" asp-action="RegisterForm">Get Started</a>
-        </li>
+
+        @if (userId != null)
+        {
+          <li class="nav-item">
+            <a class="nav-link" asp-controller="Events" asp-action="NewEventsForm">Create Event</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" asp-controller="Invite" asp-action="Send">Invite Crew</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" asp-controller="Location" asp-action="Track">Live Track</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="@profileImage" alt="Profile" class="rounded-circle" width="32" height="32" />
+              <span class="ms-2">@userName</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a></li>
+              <li><a class="dropdown-item" asp-controller="Events" asp-action="NewEventsForm">Create Event</a></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
+            </ul>
+          </li>
+        }
+        else
+        {
+          <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="LoginForm">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-magenta text-light ms-3" asp-controller="Account" asp-action="RegisterForm">Get Started</a>
+          </li>
+        }
       </ul>
     </div>
   </div>
