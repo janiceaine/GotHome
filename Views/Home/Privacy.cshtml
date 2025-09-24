@@ -1,25 +1,50 @@
 ﻿@model PrivacyViewModel
+
 @{
     ViewData["Title"] = "Privacy Policy";
 }
+
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
-<div id="map" style="height:500px; width:100%;"></div>
-
-
+<div id="map" style="height:500px;width:100%;"></div>
 
 @section Scripts {
+    <!-- Load Google Maps API with marker library -->
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsAPIKey&libraries=maps,marker&callback=initMap"></script>
+
     <script type="module">
-        import { loadGoogleMaps, addMarker } from '/js/map.js';
+        import { addMarker } from '/js/map.js';
 
-        (async () => {
-            const apiKey = '@Model.GoogleMapsAPIKey';
-            await loadGoogleMaps(apiKey);
+        // Pass API key, Map ID, and markers data to JavaScript
+        window.mapConfig = {
+            apiKey: '@Model.GoogleMapsAPIKey',
+            mapId: '@Model.GoogleMapsMapId',
+            markers: [
+                @if (Model.Markers != null)
+                {
+                    @foreach (var marker in Model.Markers)
+                    {
+                        @:{ lat: @marker.Lat, lng: @marker.Lng, color: '@marker.Color', title: '@marker.Title' },
+                    }
+                }
+                
+            ]
+        };
 
-            // Example: add home and destination markers dynamically
-            addMarker(32.5358053807361, -97.09577927978566, "green","Home"); // home
-            addMarker(32.747519, -97.092994, "orange","Event location"); // destination
-        })();
+        console.log('Map config:', window.mapConfig);
+
+        // Call addMarker for each marker after map initializes
+        window.addEventListener('mapInitialized', () => {
+            console.log('mapInitialized event fired, adding markers:', window.mapConfig.markers);
+            window.mapConfig.markers.forEach(data => {
+                addMarker(data.lat, data.lng, data.color, data.title);
+            });
+        });
     </script>
+
+    <!-- Load map.js -->
+    <script type="module" src="/js/map.js"></script>
+
+   
 }

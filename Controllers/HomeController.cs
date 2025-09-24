@@ -22,7 +22,28 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var vm = new PrivacyViewModel { GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "" };
+        var vm = new PrivacyViewModel
+        {
+            GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "",
+            GoogleMapsMapId = _config["GoogleMapId"] ?? "",
+            Markers = new List<MarkerData>
+            {
+                new MarkerData
+                {
+                    Lat = 32.5358053807361,
+                    Lng = -97.09577927978566,
+                    Color = "green",
+                    Title = "Home",
+                },
+                new MarkerData
+                {
+                    Lat = 32.747519,
+                    Lng = -97.092994,
+                    Color = "orange",
+                    Title = "Event location",
+                },
+            },
+        };
         return View(vm);
     }
 
