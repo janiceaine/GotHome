@@ -1,11 +1,11 @@
-@model ProfileViewModel
+@* @model ProfileViewModel
 @{
     var profile = Model;
 }
 
 <div class="card shadow">
     <div class="card-header position-relative px-3 py-5 bg-primary">
-        <img style="width: 5rem; top: 3rem; width: 120px; height: 120px; object-fit: cover;" class="rounded position-absolute" src="@profile.ProfileImageUrl"
+        <img style="width: 5rem; top: 3rem;width: 120px; height: 100px; object-fit: cover; " class="rounded position-absolute" src="@profile.ProfileImageUrl"
             alt="@profile.UserName" />
     </div>
     <div class="card-body pt-5">
@@ -16,5 +16,100 @@
             <strong>Name: </strong> @profile.FullName<br />
             <strong>Location: </strong> @profile.Location<br /><br />
         </p>
+    </div>
+</div> *@
+
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Your Profile";
+    var profile = Model;
+}
+
+<style>
+    .profile-page {
+        min-height: 100vh;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 4rem;
+    }
+
+    .profile-card {
+        background-color: rgb(27, 33, 38);
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 100%;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .profile-card h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: rebeccapurple;
+    }
+
+    .profile-card img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+        border: 3px solid rebeccapurple;
+    }
+
+    .profile-card .info {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .profile-card .info strong {
+        color: #ffb6c1;
+    }
+
+    .btn-edit {
+        margin-top: 2rem;
+        background-color: rebeccapurple;
+        border: none;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-edit:hover {
+        background-color: #5e2ca5;
+    }
+
+    @@media screen and (max-width: 768px) {
+        .profile-card {
+            padding: 1.5rem;
+        }
+
+        .profile-card h1 {
+            font-size: 2rem;
+        }
+
+        .profile-card .info {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="profile-page">
+    <div class="profile-card">
+        <img src="@profile.ProfileImageUrl" alt="@profile.UserName" />
+        <h1>@profile.UserName</h1>
+        <div class="info">
+            <p><strong>Email:</strong> @profile.Email</p>
+            <p><strong>Join Date:</strong> @profile.JoinDate</p>
+            <p><strong>Name:</strong> @profile.FullName</p>
+            <p><strong>Location:</strong> @profile.Location</p>
+        </div>
+        <a href="/account/profile/update/@profile.UserId" class="btn-edit">Edit Profile</a>
     </div>
 </div>

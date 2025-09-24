@@ -5,7 +5,7 @@
         <h2 class="display-6 m-0">Edit Profile</h2>
     </div>
     <div class="card-body">
-        <form asp-action="UpdateProfile" asp-controller="Account" method="POST" enctype="multipart/form-data">
+        <form asp-action="UpdateProfile" asp-controller="Account" method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="UserId" value="@Model.UserId">
             <div class="row mb-3">
                 <div class="col">

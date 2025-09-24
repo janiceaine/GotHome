@@ -19,4 +19,6 @@ public class ProfileFormViewModel
 
     [ImageFile]
     public IFormFile? ProfileImage { get; set; }
+
+    public string? ProfileImageUrl { get; set; }
 }

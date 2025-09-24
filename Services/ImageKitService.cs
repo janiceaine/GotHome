@@ -33,7 +33,7 @@ public class ImageKitService : IImageService
         {
             file = base64Image,
             fileName = fileName,
-            // folder = "avatars", // optional Imagekit folder name (if you have one)
+            // folder = "gothome", // optional Imagekit folder name (if you have one)
         };
 
         var response = await _imagekit.UploadAsync(request);
