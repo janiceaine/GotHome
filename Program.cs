@@ -16,7 +16,8 @@ builder.Services.AddDbContext<ApplicationContext>(
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 );
-
+builder.WebHost.UseUrls("http://0.0.0.0:5228");
+builder.WebHost.UseUrls("https://0.0.0.0:7031");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

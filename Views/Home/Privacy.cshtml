@@ -7,11 +7,20 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+        <input
+          id="home-address"
+          name="home-address"
+          required
+          autocomplete="off"
+        />
+     
 <div id="map" style="height:500px;width:100%;"></div>
+
 
 @section Scripts {
     <!-- Load Google Maps API with marker library -->
-    <script async src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsAPIKey&libraries=maps,marker&callback=initMap"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsAPIKey&libraries=maps,marker,places&callback=initMap"></script>
 
     <script type="module">
         import { addMarker } from '/js/map.js';
@@ -20,16 +29,7 @@
         window.mapConfig = {
             apiKey: '@Model.GoogleMapsAPIKey',
             mapId: '@Model.GoogleMapsMapId',
-            markers: [
-                @if (Model.Markers != null)
-                {
-                    @foreach (var marker in Model.Markers)
-                    {
-                        @:{ lat: @marker.Lat, lng: @marker.Lng, color: '@marker.Color', title: '@marker.Title' },
-                    }
-                }
-                
-            ]
+           
         };
 
         console.log('Map config:', window.mapConfig);
@@ -40,11 +40,26 @@
             window.mapConfig.markers.forEach(data => {
                 addMarker(data.lat, data.lng, data.color, data.title);
             });
+
+            //add current location
+            getCurrentLocation();
         });
     </script>
 
     <!-- Load map.js -->
     <script type="module" src="/js/map.js"></script>
 
-   
+   @* <script>
+   var addressInput = document.querySelector('#home-address');
+   document.addEventListener('DOMContentLoaded',function(){
+    var autoComplete = new google.maps.places.Autocomplete(addressInput.{
+        componentRestrictions: {country:'us'}
+
+    });
+    autoComplete.addListener('place_changed',function(){
+        var nearPlace = autoComplete.getPlace();
+    });
+   });
+   </script> *@
+  
 }
