@@ -244,10 +244,24 @@ export function getCurrentLocation(
 									new google.maps.LatLng(location.lat, location.lng)
 								);
 							if (distance <= location.radius) {
-								alert(`You have arrived at ${location.name}`);
-								statusText = `Tracking enabled at ${location.name}`;
-
-								clearMapLocations();
+								console.log(
+									`Detected proximity to ${location.name}: ${distance.toFixed(
+										2
+									)} meters, delaying arrival by 5 seconds`
+								);
+								setTimeout(() => {
+									if (watchId === null) {
+										console.log('Arrival aborted: Tracking stopped');
+										return;
+									}
+									statusText = `Arrived at ${location.name}`;
+									alert(`You have arrived at ${location.name}`);
+									if (trackingStatus) {
+										trackingStatus.textContent = statusText;
+										console.log('Tracking status updated:', statusText);
+									}
+									clearMapLocations();
+								}, 5000);
 							}
 						});
 						if (trackingStatus) {
@@ -301,20 +315,20 @@ export function getCurrentLocation(
 	// }, 1000);
 
 	//Stop tracking after specified duration
-	setTimeout(() => {
-		if (currentLocationTrackingMarker) {
-			currentLocationTrackingMarker.map = null;
-			markers = markers.filter((m) => m !== currentLocationTrackingMarker);
-			currentLocationTrackingMarker = null;
-		}
-		// if (watchId !== null) {
-		// 	navigator.geolocation.clearWatch(watchId);
-		// 	watchId = null;
-		// 	console.log(`Stopped tracking location`);
-		// 	alert(`GotHome location tracking has ended.`);
-		// 	document.getElementById('stop-tracking').classList.add('d-none');
-		// }
-	}, durationSeconds * 1000);
+	// setTimeout(() => {
+	// 	if (currentLocationTrackingMarker) {
+	// 		currentLocationTrackingMarker.map = null;
+	// 		markers = markers.filter((m) => m !== currentLocationTrackingMarker);
+	// 		currentLocationTrackingMarker = null;
+	// 	}
+	// if (watchId !== null) {
+	// 	navigator.geolocation.clearWatch(watchId);
+	// 	watchId = null;
+	// 	console.log(`Stopped tracking location`);
+	// 	alert(`GotHome location tracking has ended.`);
+	// 	document.getElementById('stop-tracking').classList.add('d-none');
+	// }
+	//}, durationSeconds * 1000);
 }
 
 //allow the user to end the tracking on demand
