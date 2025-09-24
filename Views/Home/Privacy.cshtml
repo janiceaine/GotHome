@@ -26,7 +26,7 @@
 
 @section Scripts {
     <!-- Load Google Maps API with marker library -->
-    <script async src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsAPIKey&libraries=maps,marker,places&callback=initMap"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsAPIKey&libraries=geometry,marker,places&callback=initMap"></script>
 
     <script type="module">
         import { addMarker } from '/js/map.js';

@@ -3,15 +3,22 @@ let map;
 //stores all map markers
 let markers = [];
 
-//store autocomplete
-let autocomplete;
+//store known locations
+const knownLocations = [
+	{
+		name: 'Janis-Home Location',
+		lat: 32.53578795878021,
+		lng: -97.09580637463117,
+		radius: 100,
+	}, // AT&T stadium
+	{ name: 'event-1-location', lat: 32.747519, lng: -97.092994, radius: 100 }, // Nearby event
+];
 
 //watch id for cotinuous gelocation
 let watchId = null;
 let currentLocationTrackingMarker = null;
 
 //close threshold for presence detection, in meters
-const REASONABLE_DISTANCE = 100;
 
 //initialize the map
 function initMap() {
@@ -59,6 +66,7 @@ function initMap() {
 
 	//start tracking current location
 	getCurrentLocation();
+
 	//setup autocomplete on event text input
 	let autocomplete_event;
 	const eventAddressInput = document.querySelector('#event-address');
@@ -89,19 +97,24 @@ function initMap() {
 	} else {
 		console.error('#event-address input not found');
 	}
-
+	// Add static known location markers (for demo)
+	knownLocations.forEach((location) => {
+		const color = location.name.includes('Home') ? 'green' : 'purple';
+		addMarker(location.lat, location.lng, color, location.name);
+	});
 	//notify map has been initialized
 	window.dispatchEvent(new Event('mapInitialized'));
 }
 
-//make initMap and StopTrackingNow globally accessible; views could not find these function otherwise
+//make functions globally accessible; views could not find these function otherwise
 window.initMap = initMap;
 window.stopTrackingNow = stopTrackingNow;
+window.getCurrentLocation = getCurrentLocation;
 
 // Get and track current location
 export function getCurrentLocation(
 	location_title = 'Current Location',
-	durationMinutes = 1
+	durationSeconds = 5
 ) {
 	if (!navigator.geolocation) {
 		console.error('Geolocation not supported');
@@ -112,13 +125,7 @@ export function getCurrentLocation(
 		return;
 	}
 
-	if (
-		!confirm(
-			`Allow GotHome to track your location for ${durationMinutes} minute${
-				durationMinutes === 1 ? '' : 's'
-			} to update the map?`
-		)
-	) {
+	if (!confirm(`Allow GotHome to track your location to update the map?`)) {
 		//hide tracking components
 		document.getElementById('stop-tracking').classList.add('d-none');
 		alert('Location tracking access has been denied by the user.');
@@ -163,7 +170,41 @@ export function getCurrentLocation(
 				'blue',
 				location_title
 			);
+			// Check if current location is near known locations
+			const trackingStatus = document.querySelector('#tracking-status');
+			let statusText = 'Tracking enabled';
+			knownLocations.forEach((location) => {
+				const distance = google.maps.geometry.spherical.computeDistanceBetween(
+					new google.maps.LatLng(pos.lat, pos.lng),
+					new google.maps.LatLng(location.lat, location.lng)
+				);
+				if (distance <= location.radius) {
+					console.log(
+						`Detected proximity to ${location.name}: ${distance.toFixed(
+							2
+						)} meters, delaying arrival by 5 seconds`
+					);
+					setTimeout(() => {
+						if (watchId === null) {
+							console.log('Arrival aborted: Tracking stopped');
+							return;
+						}
+						statusText = `Arrived at ${location.name}`;
+						alert(`You have arrived at ${location.name}`);
+						if (trackingStatus) {
+							trackingStatus.textContent = statusText;
+							console.log('Tracking status updated:', statusText);
+						}
+						clearMapLocations();
+					}, 5000);
+				}
+			});
+			if (trackingStatus) {
+				trackingStatus.textContent = statusText;
+			}
+
 			window.dispatchEvent(new CustomEvent('locationUpdated', { detail: pos }));
+			updateVisibility();
 		},
 		(error) => {
 			console.error('Geolocation error:', {
@@ -175,7 +216,7 @@ export function getCurrentLocation(
 				alert(
 					'Location tracking denied. On Android, go to Settings > Apps > Chrome/Firefox > Permissions > Location and set to "Allow all the time".'
 				);
-				// Fallback to getCurrentPosition
+				//fallback to getCurrentPosition
 				console.log('Falling back to getCurrentPosition');
 				navigator.geolocation.getCurrentPosition(
 					(position) => {
@@ -186,25 +227,49 @@ export function getCurrentLocation(
 						console.log('getCurrentPosition success:', pos);
 						map.setCenter(pos);
 						map.setZoom(15);
-						currentLocationTrackingMarker = addMarker(
+						currentLocationMarker = addMarker(
 							pos.lat,
 							pos.lng,
-							'blue',
-							location_title
+							'black',
+							'Previous Current Location'
 						);
+
+						//within fallback, check if current location is near known locations
+						const trackingStatus = document.querySelector('#tracking-status');
+						let statusText = 'Tracking enabled';
+						knownLocations.forEach((location) => {
+							const distance =
+								google.maps.geometry.spherical.computeDistanceBetween(
+									new google.maps.LatLng(pos.lat, pos.lng),
+									new google.maps.LatLng(location.lat, location.lng)
+								);
+							if (distance <= location.radius) {
+								alert(`You have arrived at ${location.name}`);
+								statusText = `Tracking enabled at ${location.name}`;
+
+								clearMapLocations();
+							}
+						});
+						if (trackingStatus) {
+							trackingStatus.textContent = statusText;
+						}
+
+						updateVisibility();
 					},
 					(err) => {
 						console.error('getCurrentPosition error:', err);
 						alert('Location access failed: ' + err.message);
-						map.setCenter({ lat: 37.7749, lng: -122.4194 });
+						map.setCenter({ lat: 32.747519, lng: -97.092994 });
 						map.setZoom(10);
+						updateVisibility();
 					},
 					{ enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
 				);
 			} else {
 				alert('Unable to retrieve location: ' + error.message);
-				map.setCenter({ lat: 37.7749, lng: -122.4194 });
+				map.setCenter({ lat: 32.747519, lng: -97.092994 });
 				map.setZoom(10);
+				updateVisibility();
 			}
 		},
 		{
@@ -235,21 +300,21 @@ export function getCurrentLocation(
 	// 	}
 	// }, 1000);
 
-	// Stop tracking after specified duration
+	//Stop tracking after specified duration
 	setTimeout(() => {
 		if (currentLocationTrackingMarker) {
 			currentLocationTrackingMarker.map = null;
 			markers = markers.filter((m) => m !== currentLocationTrackingMarker);
 			currentLocationTrackingMarker = null;
 		}
-		if (watchId !== null) {
-			navigator.geolocation.clearWatch(watchId);
-			watchId = null;
-			console.log(`Stopped tracking location`);
-			alert(`GotHome location tracking has ended.`);
-			document.getElementById('stop-tracking').classList.add('d-none');
-		}
-	}, durationMinutes * 60 * 1000);
+		// if (watchId !== null) {
+		// 	navigator.geolocation.clearWatch(watchId);
+		// 	watchId = null;
+		// 	console.log(`Stopped tracking location`);
+		// 	alert(`GotHome location tracking has ended.`);
+		// 	document.getElementById('stop-tracking').classList.add('d-none');
+		// }
+	}, durationSeconds * 1000);
 }
 
 //allow the user to end the tracking on demand
@@ -328,15 +393,8 @@ export function addMarker(lat, lng, color = 'red', title = 'location') {
 	return marker;
 }
 function updateVisibility() {
-	const clearMarkerButton = document.querySelector('#clear-marker');
 	const stopTrackingButton = document.querySelector('#stop-tracking');
 	const trackingStatus = document.querySelector('#tracking-status');
-
-	if (clearMarkerButton) {
-		clearMarkerButton.classList.toggle('d-none', !currentLocationMarker);
-	} else {
-		console.warn('Element #clear-marker not found in DOM');
-	}
 
 	if (stopTrackingButton) {
 		stopTrackingButton.classList.toggle('d-none', watchId === null);
@@ -349,4 +407,16 @@ function updateVisibility() {
 	} else {
 		console.warn('Element #tracking-status not found in DOM');
 	}
+}
+function clearMapLocations() {
+	if (currentLocationTrackingMarker) {
+		currentLocationTrackingMarker.map = null;
+		markers = markers.filter((m) => m !== currentLocationTrackingMarker);
+		currentLocationTrackingMarker = null;
+	}
+	if (watchId !== null) {
+		navigator.geolocation.clearWatch(watchId);
+		watchId = null;
+	}
+	updateVisibility();
 }
