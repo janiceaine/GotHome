@@ -23,4 +23,6 @@ public class EventFormViewModel
     public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
     public int? UserId { get; set; }
+    public string GoogleMapsAPIKey { get; set; } = string.Empty;
+    public string GoogleMapsMapId { get; set; } = string.Empty;
 }

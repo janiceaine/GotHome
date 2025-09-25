@@ -24,4 +24,6 @@ public class ProfileFormViewModel
     public IFormFile? ProfileImage { get; set; }
 
     public string? ProfileImageUrl { get; set; }
+    public string GoogleMapsAPIKey { get; set; } = string.Empty;
+    public string GoogleMapsMapId { get; set; } = string.Empty;
 }
