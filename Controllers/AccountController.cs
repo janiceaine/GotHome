@@ -4,6 +4,7 @@ using GotHome.ViewModels;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace GotHome.Controllers;
 
@@ -84,10 +85,7 @@ public class AccountController : Controller
         // log User in
         HttpContext.Session.SetInt32(SessionUserId, newUser.Id);
         HttpContext.Session.SetString("UserName", newUser.UserName);
-        HttpContext.Session.SetString(
-            "ProfileImage",
-            newProfile.ProfileImageUrl ?? "/images/default-avatar.jpg"
-        );
+        HttpContext.Session.SetString("ProfileImage", newProfile.ProfileImageUrl);
 
         // Redirects to Home or Dashboard
         return RedirectToAction(nameof(Profile));
@@ -193,8 +191,34 @@ public class AccountController : Controller
         // Step 1: Check for validation errors
         if (!ModelState.IsValid)
         {
+            var user = await _context
+                .Users.AsNoTracking()
+                .Include((u) => u.Profile)
+                .FirstOrDefaultAsync((u) => u.Id == uid);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+            var profileViewModel = new ProfileViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                JoinDate = user.CreatedAt.Humanize(),
+                FullName = user.Profile!.FullName ?? "",
+                Location = user.Profile!.Location ?? "",
+                ProfileImageUrl = user.Profile!.ProfileImageUrl ?? "",
+                UserId = user.Id,
+            };
+
+            var viewmodel = new ProfilePageViewModel
+            {
+                ProfileViewModel = profileViewModel,
+                ProfileFormViewModel = vm,
+            };
+
             // If validation fails, reload the page with error messages.
-            return View(nameof(Profile), vm);
+            return View(nameof(Profile), viewmodel);
         }
 
         // Step 2: Get the user's profile from the database
@@ -204,6 +228,8 @@ public class AccountController : Controller
         if (vm.UserId != profile.UserId)
             return Forbid();
 
+        Console.WriteLine("************************ update profile");
+        Console.WriteLine(vm.ProfileImage?.FileName);
         // Step 3: Handle the image upload
         if (vm.ProfileImage is not null)
         {
@@ -215,6 +241,13 @@ public class AccountController : Controller
         profile.LastName = (vm.LastName ?? "").Trim();
         profile.Location = (vm.Location ?? "").Trim();
         profile.UpdatedAt = DateTime.UtcNow;
+
+        Console.WriteLine(
+            profile.FirstName,
+            profile.LastName,
+            profile.Location,
+            profile.ProfileImageUrl
+        );
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Profile));
@@ -253,7 +286,9 @@ public class AccountController : Controller
         }
 
         // email exists, find user
-        var maybeUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == vm.Email);
+        var maybeUser = await _context
+            .Users.Include(u => u.Profile)
+            .FirstOrDefaultAsync(u => u.Email == vm.Email);
 
         if (maybeUser is null)
         {
@@ -274,7 +309,10 @@ public class AccountController : Controller
         HttpContext.Session.SetInt32(SessionUserId, maybeUser.Id);
         HttpContext.Session.SetString("UserName", maybeUser.UserName);
 
-        var profileImageUrl = maybeUser.Profile?.ProfileImageUrl ?? "/images/default-avatar.jpg";
+        Console.WriteLine("******************************");
+        Console.WriteLine(maybeUser.Profile?.ProfileImageUrl);
+        var profileImageUrl = maybeUser.Profile?.ProfileImageUrl;
+
         HttpContext.Session.SetString("ProfileImage", profileImageUrl);
 
         // Redirects to Home or Dashboard

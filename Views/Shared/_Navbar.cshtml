@@ -2,7 +2,7 @@
 @{
   var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("userId");
   var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName") ?? "Guest";
-  var profileImage = HttpContextAccessor.HttpContext?.Session.GetString("ProfileImage") ?? "/images/default-avatar.jpg";
+  var profileImage = HttpContextAccessor.HttpContext?.Session.GetString("ProfileImage");
 }
 
 <nav class="navbar navbar-expand-lg navbar-dark border-bottom shadow-sm">
@@ -35,10 +35,10 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="@profileImage" alt="Profile" class="rounded-circle" width="32" height="32" />
-              <span class="ms-2">@userName</span>
+              <img src="@profileImage" alt="Profile" class="rounded-circle me-2" width="32" height="32" />
+              <span>@userName</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a></li>
@@ -46,7 +46,7 @@
               <li>
                 <hr class="dropdown-divider" />
               </li>
-              <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">Logout</a></li>
+              <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="ConfirmLogout">Logout</a></li>
             </ul>
           </li>
         }
