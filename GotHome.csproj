@@ -7,6 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <UserSecretsId>71130675-9ee8-47ec-ae32-8b7fecd5f937</UserSecretsId>
+    </ItemGroup>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
