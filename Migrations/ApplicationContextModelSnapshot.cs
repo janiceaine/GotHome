@@ -202,6 +202,10 @@ namespace GotHome.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AttendanceStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
