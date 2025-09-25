@@ -2,14 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center display-1 m-3">
-    <img src="/images/gothome2.png" alt="GotHome" width="400" />
+<div class="text-center m-3">
+    <img src="/images/gothome2.png" alt="GotHome" class="img-fluid" style="max-width: 400px;" />
 </div>
 
 <style>
     body {
-        background-image:
-            url('/images/night1.jpeg');
+        background-image: url('/images/night1.jpeg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -18,7 +17,7 @@
     }
 
     .hero {
-        padding: 16rem 2rem;
+        padding: 12rem 2rem;
         text-align: center;
         background: url('/images/ratioed.png') no-repeat center center;
         background-size: contain;
@@ -41,6 +40,7 @@
         padding: 0.75rem 2rem;
         font-weight: 500;
         border: none;
+        color: #fff;
     }
 
     .feature-card {
@@ -49,6 +49,7 @@
         padding: 2rem;
         color: #e0e0e0;
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        height: 100%;
     }
 
     .footer {
@@ -57,6 +58,21 @@
         text-align: center;
         font-size: 0.9rem;
         color: #888;
+    }
+
+    /* Mobile adjustments */
+    @@media (max-width: 768px) {
+        .hero {
+            padding: 6rem 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+        }
     }
 </style>
 
@@ -68,32 +84,32 @@
 
 <section id="features" class="container py-5">
     <div class="row g-4">
-        <div class="col-md-3">
+        <div class="col-12 col-md-3">
             <div class="feature-card text-center">
                 <div class="mb-2">🏠</div>
                 <h5>One-Tap Check-In</h5>
                 <p>Just open the app and we’ll do the rest.</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-12 col-md-3">
             <div class="feature-card text-center">
-                <div class="mb-2">🏠</div>
-                <h5>One-Tap Check-In</h5>
-                <p>Just open the app and we’ll do the rest.</p>
+                <div class="mb-2">👥</div>
+                <h5>Stay Connected</h5>
+                <p>Keep your crew updated in real time.</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-12 col-md-3">
             <div class="feature-card text-center">
-                <div class="mb-2">🏠</div>
-                <h5>One-Tap Check-In</h5>
-                <p>Just open the app and we’ll do the rest.</p>
+                <div class="mb-2">🔔</div>
+                <h5>Smart Notifications</h5>
+                <p>Get alerts when your friends arrive home.</p>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-12 col-md-3">
             <div class="feature-card text-center">
-                <div class="mb-2">🏠</div>
-                <h5>One-Tap Check-In</h5>
-                <p>Just open the app and we’ll do the rest.</p>
+                <div class="mb-2">🌙</div>
+                <h5>Peace of Mind</h5>
+                <p>Relax knowing your crew got home safe.</p>
             </div>
         </div>
     </div>
@@ -101,12 +117,16 @@
 
 <section class="container py-5 text-center">
     <h2 class="mb-4">Designed for nights out, built for peace of mind.</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-5">
+    <div class="row justify-content-center g-4">
+        <div class="col-12 col-md-5">
             <img src="/images/visual.png" class="img-fluid rounded shadow" />
         </div>
-        <div class="col-md-5">
+        <div class="col-12 col-md-5">
             <img src="/images/imgae.png" class="img-fluid rounded shadow" />
         </div>
     </div>
 </section>
+
+<footer class="footer">
+    <p>&copy; 2025 GotHome. All rights reserved.</p>
+</footer>
