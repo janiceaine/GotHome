@@ -1,21 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
+<PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>61aff2eb-ab1a-4889-b5ef-cc948e172d93</UserSecretsId>
-  </PropertyGroup>
-  <ItemGroup>
     <UserSecretsId>71130675-9ee8-47ec-ae32-8b7fecd5f937</UserSecretsId>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="Humanizer" Version="2.14.1" />
-    <PackageReference Include="Imagekit" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.17">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
-  </ItemGroup>
+<ItemGroup>
+<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+<PackageReference Include="Humanizer" Version="2.14.1" />
+<PackageReference Include="Imagekit" Version="5.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.17">
+<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+<PrivateAssets>all</PrivateAssets>
+</PackageReference>
+<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
+</ItemGroup>
 </Project>
