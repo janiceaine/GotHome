@@ -158,7 +158,7 @@ public class EventsController : Controller
                 .RSVPs.Select(r => new RSVPViewModel
                 {
                     UserName = r.User?.UserName ?? "Unknown",
-                    Timestamp = r.Timestamp,
+                    RespondedAt = r.RespondedAt,
                 })
                 .ToList(),
 
@@ -283,7 +283,7 @@ public class EventsController : Controller
                 {
                     EventId = id,
                     UserId = userId.Value,
-                    Timestamp = DateTime.UtcNow,
+                    RespondedAt = DateTime.UtcNow,
                 }
             );
             await _context.SaveChangesAsync();
