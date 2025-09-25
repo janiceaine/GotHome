@@ -120,6 +120,8 @@ public class EventsController : Controller
             .Include(e => e.Invites)
             .Include(e => e.RSVPs)
             .ThenInclude(r => r.User)
+            .Include(e => e.Invites)
+            .ThenInclude(i => i.Sender)
             .Include(e => e.LocationPings)
             .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(e => e.Id == id);
@@ -135,9 +137,34 @@ public class EventsController : Controller
             Location = evt.Location,
             StartTime = evt.StartTime,
             UploadedBy = evt.User?.UserName ?? "Unknown",
-            Invitees = evt.Invites.Select(i => i.RecipientEmail).ToList(),
-            RSVPs = evt.RSVPs.Select(r => r.User?.UserName ?? "Unknown").ToList(),
-            LocationPings = evt.LocationPings.OrderByDescending(p => p.Timestamp).ToList(),
+            Invites = evt
+                .Invites.Select(i => new InviteViewModel
+                {
+                    RecipientEmail = i.RecipientEmail,
+                    SenderName = i.Sender?.UserName ?? "Unknown",
+                    Message = i.Message,
+                    SentAt = i.SentAt,
+                })
+                .ToList(),
+
+            RSVPs = evt
+                .RSVPs.Select(r => new RSVPViewModel
+                {
+                    UserName = r.User?.UserName ?? "Unknown",
+                    Timestamp = r.Timestamp,
+                })
+                .ToList(),
+
+            LocationPings = evt
+                .LocationPings.OrderByDescending(p => p.Timestamp)
+                .Select(p => new LocationPingViewModel
+                {
+                    UserName = p.User?.UserName ?? "Unknown",
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    Timestamp = p.Timestamp,
+                })
+                .ToList(),
         };
 
         return View(vm);
@@ -221,7 +248,6 @@ public class EventsController : Controller
         return RedirectToAction(nameof(EventDetails), new { id });
     }
 
-    // POST /events/{id}/rsvp
     [HttpPost("{id}/rsvp")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RSVP(int id)
@@ -258,7 +284,6 @@ public class EventsController : Controller
         return RedirectToAction(nameof(EventDetails), new { id });
     }
 
-    // POST /events/{id}/invite
     [HttpPost("{id}/invite")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Invite(int id, InviteFormViewModel vm)
@@ -298,7 +323,6 @@ public class EventsController : Controller
         return RedirectToAction(nameof(EventDetails), new { id });
     }
 
-    // POST /events/{id}/ping
     [HttpPost("{id}/ping")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> PingLocation(int id, LocationPingViewModel vm)
@@ -325,7 +349,6 @@ public class EventsController : Controller
         return Ok(new { success = true, message = "Location ping saved." });
     }
 
-    // POST /events/{id}/wrap
     [HttpPost("{id}/wrap")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> WrapEvent(int id)
@@ -418,7 +441,7 @@ public class EventsController : Controller
         _context.Events.Remove(evt);
         await _context.SaveChangesAsync();
 
-        TempData["ToastMessage"] = "🗑️ Event deleted!";
+        TempData["ToastMessage"] = "Event deleted!";
         return RedirectToAction(nameof(EventsIndex));
     }
 }

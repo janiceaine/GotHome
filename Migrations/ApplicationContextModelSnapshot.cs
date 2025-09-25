@@ -49,8 +49,7 @@ namespace GotHome.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -72,6 +71,9 @@ namespace GotHome.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -202,6 +204,12 @@ namespace GotHome.Migrations
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsAttending")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("RespondedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime(6)");

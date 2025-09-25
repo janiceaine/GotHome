@@ -1,7 +1,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @{
   var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("userId");
-  var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName");
+  var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName") ?? "Guest";
   var profileImage = HttpContextAccessor.HttpContext?.Session.GetString("ProfileImage") ?? "/images/default-avatar.jpg";
 }
 
@@ -18,12 +18,12 @@
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav align-items-lg-center">
-        <li class="nav-item">
-          <a class="nav-link" href="#features">How It Works</a>
-        </li>
 
         @if (userId != null)
         {
+          <li class="nav-item">
+            <a class="nav-link" asp-controller="Events" asp-action="EventsIndex">All Events</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" asp-controller="Events" asp-action="NewEventsForm">Create Event</a>
           </li>
@@ -53,12 +53,16 @@
         else
         {
           <li class="nav-item">
+            <a class="nav-link" href="#features">How It Works</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" asp-controller="Account" asp-action="LoginForm">Login</a>
           </li>
           <li class="nav-item">
             <a class="btn btn-magenta text-light ms-3" asp-controller="Account" asp-action="RegisterForm">Get Started</a>
           </li>
         }
+
       </ul>
     </div>
   </div>

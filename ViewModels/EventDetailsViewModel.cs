@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using GotHome.Models;
+using GotHome.ViewModels;
 
 public class EventDetailsViewModel
 {
@@ -20,7 +21,7 @@ public class EventDetailsViewModel
     public DateTime StartTime { get; set; }
     public string UploadedBy { get; set; } = string.Empty;
 
-    public List<string> Invitees { get; set; } = [];
-    public List<string> RSVPs { get; set; } = [];
-    public List<LocationPing> LocationPings { get; set; } = [];
+    public List<InviteViewModel> Invites { get; set; } = [];
+    public List<RSVPViewModel> RSVPs { get; set; } = [];
+    public List<LocationPingViewModel> LocationPings { get; set; } = [];
 }
