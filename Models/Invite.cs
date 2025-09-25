@@ -25,4 +25,5 @@ public class Invite
 
     [Required]
     public DateTime SentAt { get; set; } = DateTime.UtcNow;
+    public bool Accepted { get; set; } = false;
 }

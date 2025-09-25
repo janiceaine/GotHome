@@ -8,7 +8,7 @@ public class Event
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Please enter a title for the event.")]
-    [MaxLength(200, ErrorMessage = "Title cannot exceed 200 characters.")]
+    [MinLength(2, ErrorMessage = "Title cannot be less than 2 characters.")]
     public string Title { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Please enter a description.")]

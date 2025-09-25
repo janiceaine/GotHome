@@ -83,6 +83,11 @@ public class AccountController : Controller
 
         // log User in
         HttpContext.Session.SetInt32(SessionUserId, newUser.Id);
+        HttpContext.Session.SetString("UserName", newUser.UserName);
+        HttpContext.Session.SetString(
+            "ProfileImage",
+            newProfile.ProfileImageUrl ?? "/images/default-avatar.jpg"
+        );
 
         // Redirects to Home or Dashboard
         return RedirectToAction(nameof(Profile));
@@ -267,6 +272,10 @@ public class AccountController : Controller
 
         // log User in
         HttpContext.Session.SetInt32(SessionUserId, maybeUser.Id);
+        HttpContext.Session.SetString("UserName", maybeUser.UserName);
+
+        var profileImageUrl = maybeUser.Profile?.ProfileImageUrl ?? "/images/default-avatar.jpg";
+        HttpContext.Session.SetString("ProfileImage", profileImageUrl);
 
         // Redirects to Home or Dashboard
         return RedirectToAction(nameof(Profile));

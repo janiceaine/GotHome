@@ -13,4 +13,6 @@ public class RSVP
     public User? User { get; set; }
 
     public DateTime Timestamp { get; set; }
+    public bool IsAttending { get; set; }
+    public DateTime RespondedAt { get; set; } = DateTime.UtcNow;
 }

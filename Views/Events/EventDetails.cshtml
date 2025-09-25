@@ -17,12 +17,17 @@
         <hr />
 
         <h5>Invitees</h5>
-        @if (Model.Invitees.Any())
+        @if (Model.Invites.Any())
         {
             <ul>
-                @foreach (var i in Model.Invitees)
+                @foreach (var i in Model.Invites)
                 {
-                    <li>@i</li>
+                    <li>
+                        <strong>@i.RecipientEmail</strong>
+                        @if (!string.IsNullOrEmpty(i.SenderName)) { <span>from @i.SenderName</span> }
+                        @if (!string.IsNullOrEmpty(i.Message)) { <span> - "@i.Message"</span> }
+                        <span> (@i.SentAt.ToString("g"))</span>
+                    </li>
                 }
             </ul>
         }
@@ -37,7 +42,7 @@
             <ul>
                 @foreach (var r in Model.RSVPs)
                 {
-                    <li>@r</li>
+                    <li>@r.UserName (@r.Timestamp.ToString("g"))</li>
                 }
             </ul>
         }
@@ -52,7 +57,9 @@
             <ul>
                 @foreach (var p in Model.LocationPings)
                 {
-                    <li>@p.User?.UserName: (@p.Latitude, @p.Longitude) at @p.Timestamp.ToString("g")</li>
+                    <li>
+                        @p.UserName (@p.Latitude, @p.Longitude) at @p.Timestamp.ToString("g")
+                    </li>
                 }
             </ul>
         }
