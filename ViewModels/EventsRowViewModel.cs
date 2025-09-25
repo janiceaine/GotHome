@@ -8,6 +8,7 @@ public class EventsRowViewModel
     public int InviteCount { get; set; }
     public string UploadedBy { get; set; } = string.Empty;
     public int UploaderId { get; set; }
+    public DateTime StartTime { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string CreateDate { get; set; } = string.Empty;
 }

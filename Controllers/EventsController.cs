@@ -42,6 +42,7 @@ public class EventsController : Controller
                     Title = e.Title,
                     UploadedBy = e.User!.UserName,
                     UploaderId = e.UserId,
+                    StartTime = e.StartTime,
                     CreateDate = e.CreatedAt.ToString("MMMM dd, yyyy"),
                     InviteCount = e.Invites.Count(),
                 })
