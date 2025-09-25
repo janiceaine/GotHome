@@ -1,0 +1,163 @@
+@model GotHome.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "Your Profile";
+    var profile = Model;
+}
+
+<style>
+.profile-page {
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.profile-card {
+    background-color: rgb(27, 33, 38);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    max-width: 700px;
+    width: 100%;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.profile-card img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid rebeccapurple;
+    margin-bottom: 1rem;
+}
+
+.profile-card h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: rebeccapurple;
+}
+
+.profile-card h2 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #ddd;
+    margin-bottom: 1.5rem;
+}
+
+.profile-card .info {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.profile-card .info p {
+    margin: 0.4rem 0;
+}
+
+.profile-card .info strong {
+    color: #ffb6c1;
+}
+
+.profile-card .stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+}
+
+.profile-card .stats .stat {
+    text-align: center;
+}
+
+.profile-card .stats .stat h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: rebeccapurple;
+}
+
+.profile-card .stats .stat p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+.btn-edit {
+    background-color: rebeccapurple;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-edit:hover {
+    background-color: #5e2ca5;
+    transform: scale(1.05);
+}
+
+@@media screen and (max-width: 768px) {
+    .profile-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .profile-card h1 {
+        font-size: 2rem;
+    }
+
+    .profile-card h2 {
+        font-size: 1rem;
+    }
+
+    .profile-card .stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .profile-card .stats .stat h3 {
+        font-size: 1.3rem;
+    }
+}
+</style>
+
+<div class="profile-page">
+    <div class="profile-card">
+        <img src="@profile.ProfileImageUrl" alt="@profile.UserName" />
+        <h1>@profile.UserName</h1>
+        <h2>@profile.FullName</h2>
+
+        <div class="info">
+            <p><strong>Email:</strong> @profile.Email</p>
+            <p><strong>Location:</strong> @profile.Location ?? "Not specified"</p>
+            <p><strong>Joined:</strong> @profile.JoinDate</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <h3>@profile.EventsCreated</h3>
+                <p>Events Created</p>
+            </div>
+            <div class="stat">
+                <h3>@profile.RSVPsCount</h3>
+                <p>RSVPs</p>
+            </div>
+            <div class="stat">
+                <h3>@profile.InvitesSent</h3>
+                <p>Invites Sent</p>
+            </div>
+        </div>
+
+        <a href="/account/profile/update/@profile.UserId" class="btn-edit">Edit Profile</a>
+    </div>
+</div>
