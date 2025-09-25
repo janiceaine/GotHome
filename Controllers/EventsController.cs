@@ -10,10 +10,12 @@ public class EventsController : Controller
 {
     private readonly ApplicationContext _context;
     private const string SessionUserId = "userId";
+    private readonly IConfiguration _config;
 
-    public EventsController(ApplicationContext context)
+    public EventsController(ApplicationContext context, IConfiguration config)
     {
         _context = context;
+        _config = config;
     }
 
     // View all Events
@@ -54,7 +56,11 @@ public class EventsController : Controller
     [HttpGet("new")]
     public IActionResult NewEventsForm()
     {
-        var vm = new EventFormViewModel();
+        var vm = new EventFormViewModel()
+        {
+            GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "",
+            GoogleMapsMapId = _config["GoogleMapId"] ?? "",
+        };
         return View(vm);
     }
 
@@ -196,6 +202,8 @@ public class EventsController : Controller
             Description = maybeEvent.Description,
             Location = maybeEvent.Location,
             StartTime = maybeEvent.StartTime,
+            GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "",
+            GoogleMapsMapId = _config["GoogleMapId"] ?? "",
         };
 
         // return View(vm);

@@ -36,67 +36,9 @@ function initMap() {
 		mapId: mapId,
 	});
 
-	//setup autocomplete on home text input
-	let autocomplete_home;
-	const homeAddressInput = document.querySelector('#home-address');
-	if (homeAddressInput) {
-		autocomplete_home = new google.maps.places.Autocomplete(homeAddressInput, {
-			types: ['geocode'],
-			componentRestrictions: { country: 'us' },
-		});
-
-		autocomplete_home.addListener('place_changed', function () {
-			const nearPlace = autocomplete_home.getPlace();
-			console.log('Selected place:', nearPlace);
-
-			if (nearPlace.geometry && nearPlace.geometry.location) {
-				const lat = nearPlace.geometry.location.lat();
-				const lng = nearPlace.geometry.location.lng();
-				console.log('Lat:', lat, 'Lng:', lng);
-
-				map.setCenter({ lat, lng });
-				map.setZoom(14);
-
-				addMarker(lat, lng, 'green', 'Home location');
-			}
-		});
-	} else {
-		console.error('#home-address input not found');
-	}
-
 	//start tracking current location
 	getCurrentLocation();
 
-	//setup autocomplete on event text input
-	let autocomplete_event;
-	const eventAddressInput = document.querySelector('#event-address');
-	if (eventAddressInput) {
-		autocomplete_event = new google.maps.places.Autocomplete(
-			eventAddressInput,
-			{
-				types: ['geocode'],
-				componentRestrictions: { country: 'us' },
-			}
-		);
-
-		autocomplete_event.addListener('place_changed', function () {
-			const nearPlace = autocomplete_event.getPlace();
-			console.log('Selected place:', nearPlace);
-
-			if (nearPlace.geometry && nearPlace.geometry.location) {
-				const lat = nearPlace.geometry.location.lat();
-				const lng = nearPlace.geometry.location.lng();
-				console.log('Lat:', lat, 'Lng:', lng);
-
-				map.setCenter({ lat, lng });
-				map.setZoom(14);
-
-				addMarker(lat, lng, 'purple', 'Event location');
-			}
-		});
-	} else {
-		console.error('#event-address input not found');
-	}
 	// Add static known location markers (for demo)
 	knownLocations.forEach((location) => {
 		const color = location.name.includes('Home') ? 'green' : 'purple';
@@ -110,6 +52,7 @@ function initMap() {
 window.initMap = initMap;
 window.stopTrackingNow = stopTrackingNow;
 window.getCurrentLocation = getCurrentLocation;
+window.autoCompleteAddress = autoCompleteAddress;
 
 // Get and track current location
 export function getCurrentLocation(
@@ -433,4 +376,35 @@ function clearMapLocations() {
 		watchId = null;
 	}
 	updateVisibility();
+}
+function autoCompleteAddress() {
+	console.log('autoCompleteAddress called');
+
+	//setup autocomplete on home text input
+	let autoComplete;
+	const addressInput = document.querySelector('#Location');
+	if (addressInput) {
+		autoComplete = new google.maps.places.Autocomplete(addressInput, {
+			types: ['geocode'],
+			componentRestrictions: { country: 'us' },
+		});
+
+		autoComplete.addListener('place_changed', function () {
+			const nearPlace = autoComplete.getPlace();
+			console.log('Selected place:', nearPlace);
+
+			// if (nearPlace.geometry && nearPlace.geometry.location) {
+			// 	const lat = nearPlace.geometry.location.lat();
+			// 	const lng = nearPlace.geometry.location.lng();
+			// 	console.log('Lat:', lat, 'Lng:', lng);
+
+			// 	map.setCenter({ lat, lng });
+			// 	map.setZoom(14);
+
+			// 	addMarker(lat, lng, 'green', 'Home location');
+			//}
+		});
+	} else {
+		console.error('#location input not found');
+	}
 }

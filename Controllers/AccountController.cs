@@ -13,17 +13,20 @@ public class AccountController : Controller
     private readonly ApplicationContext _context;
     private readonly IPasswordService _passwords;
     private readonly IImageService _images;
+    private readonly IConfiguration _config;
     private const string SessionUserId = "userId";
 
     public AccountController(
         ApplicationContext context,
         IPasswordService passwords,
-        IImageService images
+        IImageService images,
+        IConfiguration config
     )
     {
         _context = context;
         _passwords = passwords;
         _images = images;
+        _config = config;
     }
 
     [HttpGet("register")]
@@ -132,9 +135,9 @@ public class AccountController : Controller
             UserName = user.UserName,
             Email = user.Email,
             JoinDate = user.CreatedAt.Humanize(),
-            FullName = user.Profile!.FullName ?? "",
-            Location = user.Profile!.Location ?? "",
-            ProfileImageUrl = user.Profile!.ProfileImageUrl ?? "",
+            FullName = user.Profile!.FullName,
+            Location = user.Profile!.Location,
+            ProfileImageUrl = user.Profile!.ProfileImageUrl,
             UserId = user.Id,
         };
 
@@ -175,6 +178,8 @@ public class AccountController : Controller
             profileFormViewModel.FirstName = user.Profile!.FirstName ?? "";
             profileFormViewModel.LastName = user.Profile!.LastName ?? "";
             profileFormViewModel.Location = user.Profile!.Location ?? "";
+            profileFormViewModel.GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "";
+            profileFormViewModel.GoogleMapsMapId = _config["GoogleMapId"] ?? "";
         }
 
         return View("_ProfileForm", profileFormViewModel);
