@@ -542,4 +542,58 @@ public class EventsController : Controller
         var vm = new RSVPFormViewModel { Id = evt.Id };
         return View(nameof(SendInvite), vm);
     }
+
+    // GET: Event Chat
+    [HttpGet("{eventId}/chat")]
+    public async Task<IActionResult> Chat(int eventId)
+    {
+        // Load the event with its messages, including User and Profile
+        var evt = await _context
+            .Events.Include(e => e.RSVPs)
+            .FirstOrDefaultAsync(e => e.Id == eventId);
+
+        if (evt == null)
+            return NotFound();
+
+        ViewBag.EventId = eventId;
+        ViewBag.EventTitle = evt.Title;
+
+        // Load chat history, including the User and their Profile for avatars
+        var messages = await _context
+            .EventChatMessages.Include(m => m.User)
+            .ThenInclude(u => u.Profile)
+            .Where(m => m.EventId == eventId)
+            .OrderBy(m => m.CreatedAt)
+            .ToListAsync();
+
+        return View(messages);
+    }
+
+    // POST: Send a message
+    [HttpPost("{eventId}/chat")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Chat(int eventId, string message)
+    {
+        var userId = HttpContext.Session.GetInt32("userId");
+        var userName = HttpContext.Session.GetString("UserName");
+
+        if (userId is null || string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(message))
+        {
+            return RedirectToAction("Chat", new { eventId });
+        }
+
+        var chatMessage = new EventChatMessage
+        {
+            EventId = eventId,
+            UserId = userId.Value,
+            UserName = userName,
+            Message = message.Trim(),
+            CreatedAt = DateTime.UtcNow,
+        };
+
+        _context.EventChatMessages.Add(chatMessage);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Chat", new { eventId });
+    }
 }

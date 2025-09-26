@@ -1,8 +1,9 @@
 @model EventDetailsViewModel
 @{
-    
-    var currentUser =Context.Session.GetInt32("userId");
-  
+
+    var currentUser = Context.Session.GetInt32("userId");
+    ViewBag.EventId = Model.Id;
+
 }
 <div class="card shadow my-4">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -19,9 +20,10 @@
         <p><strong>Host:</strong> @Model.UploadedBy</p>
 
         <hr />
-        @if(Model.RSVPs.Any(r => r.AttendanceStatus == "Host" && r.UserId == currentUser && r.EventId==Model.Id)){
+        @if (Model.RSVPs.Any(r => r.AttendanceStatus == "Host" && r.UserId == currentUser && r.EventId == Model.Id))
+        {
             <h5>Invitation</h5>
-        <a href="/events/@Model.Id/send" title="send an invite" class="btn btn-sm btn-primary">Send an invite</a>
+            <a href="/events/@Model.Id/send" title="send an invite" class="btn btn-sm btn-primary">Send an invite</a>
         }
         @*@
         @if (Model.Invites.Any())
@@ -49,17 +51,22 @@
             <ul>
                 @foreach (var r in Model.RSVPs)
                 {
-                    if(r.UserId != currentUser && r.AttendanceStatus!="Host"){
-                    <li>@r.UserName (@r.RespondedAt.ToString("g")) @r.AttendanceStatus</li>
-                    }else if(r.AttendanceStatus!="Host"){
-                        <li>Me (@r.RespondedAt.ToString("g")) @r.AttendanceStatus <a href="/events/@Model.Id/rsvping" title="change my RSVP" class="btn btn-sm btn-primary">Change my RSVP</a></li>
+                    if (r.UserId != currentUser && r.AttendanceStatus != "Host")
+                    {
+                        <li>@r.UserName (@r.RespondedAt.ToString("g")) @r.AttendanceStatus</li>
+                    }
+                    else if (r.AttendanceStatus != "Host")
+                    {
+                        <li>Me (@r.RespondedAt.ToString("g")) @r.AttendanceStatus <a href="/events/@Model.Id/rsvping"
+                                title="change my RSVP" class="btn btn-sm btn-primary">Change my RSVP</a></li>
                     }
                 }
             </ul>
         }
         else
         {
-            <p>No RSVPs yet. <a href="/events/@Model.Id/rsvping" title="change my RSVP" class="btn btn-sm btn-primary">RSVP</a></p>
+            <p>No RSVPs yet. <a href="/events/@Model.Id/rsvping" title="change my RSVP"
+                    class="btn btn-sm btn-primary">RSVP</a></p>
         }
 
         <h5>Live Tracking</h5>

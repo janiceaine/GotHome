@@ -1,3 +1,4 @@
+using GotHome.Hubs;
 using GotHome.Models;
 using GotHome.Services;
 using Microsoft.EntityFrameworkCore;
@@ -5,23 +6,47 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 
-// Add services to the container.
+// --------------------
+// Add services
+// --------------------
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR(); // SignalR for real-time chat
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
+
+// Scoped services
 builder.Services.AddScoped<IPasswordService, BcryptPasswordService>();
 builder.Services.AddScoped<IImageService, ImageKitService>();
-builder.Services.AddDbContext<ApplicationContext>(
-    (options) =>
+
+// Database context
+builder.Services.AddDbContext<ApplicationContext>(options =>
+{
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
+
+// CORS for SignalR
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
     {
-        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-    }
-);
-builder.WebHost.UseUrls("http://0.0.0.0:5228");
-builder.WebHost.UseUrls("https://0.0.0.0:7031");
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .SetIsOriginAllowed(origin => true); // Allow any origin
+    });
+});
+
+// --------------------
+// Configure URLs
+// --------------------
+builder.WebHost.UseUrls("http://0.0.0.0:5228", "https://0.0.0.0:7031");
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// --------------------
+// Middleware pipeline
+// --------------------
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error/500");
@@ -34,10 +59,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+// Must come before MapHub
+app.UseCors();
 
+app.UseAuthorization();
 app.UseSession();
 
+// --------------------
+// Routing
+// --------------------
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// SignalR hub
+app.MapHub<EventChatHub>("/eventChatHub");
 
 app.Run();

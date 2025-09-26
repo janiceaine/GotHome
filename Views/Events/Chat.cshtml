@@ -1,0 +1,110 @@
+@model List<GotHome.Models.EventChatMessage>
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Event Chat";
+    var eventId = ViewBag.EventId ?? 0;
+    var currentUserId = HttpContextAccessor.HttpContext?.Session.GetInt32("userId") ?? 0;
+}
+
+<h3 class="mb-3 mt-3">@ViewBag.EventTitle</h3>
+
+<div class="chat-container border rounded p-3" style="height: 400px; overflow-y: auto;" id="messages">
+    @foreach (var msg in Model)
+    {
+        var profileImage = msg.User?.Profile?.ProfileImageUrl ?? "/images/default-avatar.png";
+        <div class="chat-message @(msg.UserId == currentUserId ? "me" : "other") mb-2">
+            <div
+                class="bubble p-2 rounded shadow-sm d-flex align-items-center @(msg.UserId == currentUserId ? "bubble-me" : "bubble-other")">
+                <img src="@profileImage" class="avatar rounded-circle me-2" width="40" height="40" />
+                <div>
+                    <strong>@msg.UserName</strong><br />
+                    <span>@msg.Message</span><br />
+                    <small class="text-muted">@msg.CreatedAt.ToLocalTime().ToString("g")</small>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="chat-input mt-2 d-flex">
+    <textarea id="messageInput" class="form-control me-2" rows="2" placeholder="Type your message..."></textarea>
+    <button id="sendBtn" class="btn btn-primary">Send</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const eventId = @eventId;
+    const currentUserId = @currentUserId;
+    const userName = "@HttpContextAccessor.HttpContext?.Session.GetString("UserName")";
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/eventChatHub")
+        .build();
+
+    connection.start()
+        .then(() => connection.invoke("JoinEvent", eventId))
+        .catch(err => console.error(err.toString()));
+
+    connection.on("ReceiveMessage", (sender, message, profileImageUrl, userId) => {
+        const msgContainer = document.getElementById("messages");
+        const div = document.createElement("div");
+        div.classList.add("chat-message", "mb-2");
+
+        div.innerHTML = `
+            <div class="bubble p-2 rounded shadow-sm d-flex align-items-center ${userId === currentUserId ? "bubble-me" : "bubble-other"}">
+                <img src="${profileImageUrl}" class="avatar rounded-circle me-2" width="40" height="40" />
+                <div>
+                    <strong>${sender}</strong><br/>
+                    <span>${message}</span><br/>
+                    <small class="text-muted">${new Date().toLocaleString()}</small>
+                </div>
+            </div>
+        `;
+        msgContainer.appendChild(div);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+    });
+
+    document.getElementById("sendBtn").addEventListener("click", () => {
+        const input = document.getElementById("messageInput");
+        const message = input.value.trim();
+        if (!message) return;
+
+        connection.invoke("SendMessage", eventId, userName, message, currentUserId)
+            .catch(err => console.error(err.toString()));
+        input.value = "";
+    });
+
+    document.getElementById("messageInput").addEventListener("keyup", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementById("sendBtn").click();
+        }
+    });
+</script>
+
+<style>
+    .bubble-me {
+        background-color: rebeccapurple;
+        color: #fff;
+        margin-left: auto;
+    }
+
+    .bubble-other {
+        background-color: #f1f1f1;
+        color: #000;
+        margin-right: auto;
+    }
+
+    .avatar {
+        flex-shrink: 0;
+    }
+
+    .chat-message {
+        display: flex;
+    }
+
+    .bubble {
+        max-width: 75%;
+    }
+</style>

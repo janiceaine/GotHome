@@ -12,6 +12,8 @@ public class ApplicationContext : DbContext
     public DbSet<LocationPing> LocationPings { get; set; }
     public DbSet<Profile> Profiles { get; set; }
 
+    public DbSet<EventChatMessage> EventChatMessages { get; set; }
+
     public ApplicationContext(DbContextOptions options)
         : base(options) { }
 }
