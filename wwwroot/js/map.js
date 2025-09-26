@@ -3,16 +3,15 @@ let map;
 //stores all map markers
 let markers = [];
 
-//store known locations
-const knownLocations = [
-	{
-		name: 'Janis-Home Location',
-		lat: 32.53578795878021,
-		lng: -97.09580637463117,
-		radius: 100,
-	}, // AT&T stadium
-	{ name: 'event-1-location', lat: 32.747519, lng: -97.092994, radius: 100 }, // Nearby event
-];
+//= [
+// {
+// 	name: 'Janis-Home Location',
+// 	lat: 32.53578795878021,
+// 	lng: -97.09580637463117,
+// 	radius: 100,
+// }, // AT&T stadium
+// { name: 'event-1-location', lat: 32.747519, lng: -97.092994, radius: 100 }, // Nearby event
+//];
 
 //watch id for cotinuous gelocation
 let watchId = null;
@@ -36,12 +35,20 @@ function initMap() {
 		mapId: mapId,
 	});
 
+	// Clear old markers
+	markers.forEach((m) => (m.map = null));
+	markers = [];
+
+	//store known locations
+	const knownLocations = window.knownLocations || [];
+
 	//start tracking current location
 	getCurrentLocation();
 
 	// Add static known location markers (for demo)
 	knownLocations.forEach((location) => {
 		const color = location.name.includes('Home') ? 'green' : 'purple';
+		alert(location.name);
 		addMarker(location.lat, location.lng, color, location.name);
 	});
 	//notify map has been initialized
@@ -347,6 +354,7 @@ export function addMarker(lat, lng, color = 'red', title = 'location') {
 	marker.element.appendChild(labelElement);
 
 	markers.push(marker);
+
 	return marker;
 }
 function updateVisibility() {
@@ -408,3 +416,15 @@ function autoCompleteAddress() {
 		console.error('#location input not found');
 	}
 }
+window.setKnownLocations = function (locations) {
+	window.knownLocations = locations;
+	console.log('Known locations updated:', window.knownLocations);
+
+	// If map is already initialized, add markers now
+	if (map && window.knownLocations.length) {
+		window.knownLocations.forEach((loc) => {
+			const color = loc.name.includes('Home') ? 'green' : 'purple';
+			addMarker(loc.lat, loc.lng, color, loc.name);
+		});
+	}
+};

@@ -119,7 +119,7 @@ public class EventsController : Controller
             EventId = newEvent.Id,
             UserId = userId.Value,
             Timestamp = DateTime.UtcNow,
-            LocationStatus = "Inactive",
+            LocationStatus = "Active",
             IsHost = true,
         };
         await _context.LocationPings.AddAsync(newLocationPing);
@@ -167,6 +167,8 @@ public class EventsController : Controller
             Description = evt.Description,
             Location = evt.Location,
             StartTime = evt.StartTime,
+            IsLiveTracking = evt.IsLiveTracking,
+            UserId = evt.UserId,
             UploadedBy = evt.User?.UserName ?? "Unknown",
             Invites = evt
                 .Invites.Select(i => new InviteViewModel
@@ -230,6 +232,7 @@ public class EventsController : Controller
             Description = maybeEvent.Description,
             Location = maybeEvent.Location,
             StartTime = maybeEvent.StartTime,
+            IsLiveTracking = maybeEvent.IsLiveTracking,
             GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "",
             GoogleMapsMapId = _config["GoogleMapId"] ?? "",
         };
@@ -277,6 +280,7 @@ public class EventsController : Controller
         evt.Location = vm.Location;
         evt.StartTime = vm.StartTime;
         evt.UpdatedAt = DateTime.UtcNow;
+        evt.IsLiveTracking = vm.IsLiveTracking;
 
         await _context.SaveChangesAsync();
 

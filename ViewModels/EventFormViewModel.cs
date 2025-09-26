@@ -25,4 +25,6 @@ public class EventFormViewModel
     public int? UserId { get; set; }
     public string GoogleMapsAPIKey { get; set; } = string.Empty;
     public string GoogleMapsMapId { get; set; } = string.Empty;
+
+    public bool IsLiveTracking { get; set; }
 }

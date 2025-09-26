@@ -1,6 +1,45 @@
+@using System.Diagnostics.Eventing.Reader
 @model LocationIndexViewModel
 @{
   var locations = Model.LocationPings;
+  var currentUser =Context.Session.GetInt32("userId");
+}
+<div id="map" style="height:250px;width:100%;"></div>
+
+
+@section Scripts {
+   
+
+     <!-- Load Google Maps API with marker library -->
+    <script async src="https://maps.googleapis.com/maps/api/js?key=@Model.GoogleMapsAPIKey&libraries=geometry,marker,places&callback=initMap"></script>
+
+    <script type="module">
+        import { addMarker } from '/js/map.js';
+
+        // Pass API key, Map ID, and markers data to JavaScript
+        window.mapConfig = {
+            apiKey: '@Model.GoogleMapsAPIKey',
+            mapId: '@Model.GoogleMapsMapId'
+           
+        };
+
+        console.log('Map config:', window.mapConfig);
+
+        // Call addMarker for each marker after map initializes
+        window.addEventListener('mapInitialized', () => {
+            console.log('mapInitialized event fired, adding markers:', window.mapConfig.markers);
+            window.mapConfig.markers.forEach(data => {
+                addMarker(data.lat, data.lng, data.color, data.title);
+            });
+
+            //add current location
+            getCurrentLocation();
+        });
+    </script>
+
+    <!-- Load map.js -->
+    <script type="module" src="/js/map.js"></script>
+   
 }
 <table class="table table-striped table-hover table-bordered border-dark">
   <thead >
@@ -14,7 +53,12 @@
     
 @foreach(var location in locations){
  <tr>
- <td>@location.Profile!.FullName</td>
+ @if(location.UserId==currentUser){
+  <td>@location.Profile!.FullName (Host)</td>
+  }
+ else{
+   <td>@location.Profile!.FullName</td>
+ }
  <td>@location.LocationStatus</td>
  
  </tr>

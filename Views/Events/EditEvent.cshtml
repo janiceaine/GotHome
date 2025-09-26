@@ -27,6 +27,11 @@
                 <input asp-for="StartTime" type="datetime-local" class="form-control">
                 <span asp-validation-for="StartTime" class="form-text text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="IsLiveTracking" class="form-check-label">Start Live Tracking?</label>
+                 <input class="form-check-input" asp-for="IsLiveTracking">
+                <span asp-validation-for="IsLiveTracking" class="form-text text-danger"></span>
+            </div>
             <div class="text-end">
                 <button type="submit" class="btn btn-primary">Update Event</button>
             </div>

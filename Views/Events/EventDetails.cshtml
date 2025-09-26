@@ -70,13 +70,23 @@
         }
 
         <h5>Live Tracking</h5>
-        @if (Model.LocationPings.Any())
+        @if (Model.UserId==currentUser)
         {
-           <a class="btn btn-primary">Start Tracking</a>
+           if(Model.IsLiveTracking){
+                <a class="btn btn-primary" href="/location">View Live Tracking</a>
+            }
+            else{
+                 <a class="btn btn-primary">Not active</a>
+            }
         }
         else
         {
-            <p>Not active</p>
+            if(Model.IsLiveTracking){
+                <a class="btn btn-primary">Start My Tracking</a>
+            }
+            else{
+                <p>Not active</p>
+            }
         }
     </div>
 </div>

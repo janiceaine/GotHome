@@ -31,6 +31,19 @@ public class LocationController : Controller
             return RedirectToAction("LoginForm", "Account", new { message = "not-authenticated" });
         }
 
+        var eventLive = await _context
+            .Events.AsNoTracking()
+            .FirstOrDefaultAsync(eventMarkers => eventMarkers.IsLiveTracking == true);
+
+        var eventMarkers = new MarkerDataClass();
+        if (eventLive is not null)
+        {
+            eventMarkers.Lat = 32.912366;
+            eventMarkers.Lng = -96.890316;
+            eventMarkers.Color = "purple";
+            eventMarkers.Title = eventLive.Title;
+        }
+
         // Displays all Locations in a list
         var vm = new LocationIndexViewModel
         {
@@ -51,8 +64,13 @@ public class LocationController : Controller
                     Timestamp = p.Timestamp,
                     LocationStatus = p.LocationStatus,
                     Profile = p.User!.Profile,
+                    Event = p.Event,
                 })
                 .ToListAsync(),
+
+            GoogleMapsAPIKey = _config["GoogleMapsJSKey"] ?? "",
+            GoogleMapsMapId = _config["GoogleMapId"] ?? "",
+            Markers = new List<MarkerDataClass> { eventMarkers },
         };
 
         return View(vm);
