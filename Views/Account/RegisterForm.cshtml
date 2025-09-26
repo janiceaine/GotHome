@@ -71,6 +71,7 @@
         <!-- right side -->
         <div class="register-right">
             <form asp-action="ProcessRegister" asp-controller="Account" method="post">
+            <input type="hidden" asp-for="EventId" />
                 <div class="form-group mb-3">
                     <label asp-for="UserName">User Name</label>
                     <input asp-for="UserName" class="form-control" placeholder="Your name" />

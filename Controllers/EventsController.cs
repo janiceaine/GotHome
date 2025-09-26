@@ -173,6 +173,7 @@ public class EventsController : Controller
                     RespondedAt = r.RespondedAt,
                     AttendanceStatus = r.AttendanceStatus ?? "No response",
                     UserId = r.UserId,
+                    EventId = r.EventId,
                 })
                 .ToList(),
 
@@ -512,5 +513,33 @@ public class EventsController : Controller
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(EventDetails), new { id = foundRSVP.EventId });
+    }
+
+    [HttpGet("{id}/send")]
+    public async Task<IActionResult> SendInvite(int id)
+    {
+        // Authentication check
+        var userId = HttpContext.Session.GetInt32(SessionUserId);
+        if (userId is null)
+        {
+            return RedirectToAction(
+                nameof(AccountController.LoginForm),
+                "Account",
+                new { message = "not-authenticated" }
+            );
+        }
+
+        // Load event and enforce ownership
+        var evt = await _context
+            .Events.AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
+
+        if (evt is null)
+        {
+            return NotFound("No Event was Found.");
+        }
+
+        var vm = new RSVPFormViewModel { Id = evt.Id };
+        return View(nameof(SendInvite), vm);
     }
 }

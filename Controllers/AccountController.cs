@@ -31,9 +31,9 @@ public class AccountController : Controller
     }
 
     [HttpGet("register")]
-    public IActionResult RegisterForm()
+    public IActionResult RegisterForm(int? eventId)
     {
-        return View(new RegisterFormViewModel());
+        return View(new RegisterFormViewModel { EventId = eventId });
     }
 
     [ValidateAntiForgeryToken]
@@ -90,6 +90,30 @@ public class AccountController : Controller
         HttpContext.Session.SetString("UserName", newUser.UserName);
         HttpContext.Session.SetString("ProfileImage", newProfile.ProfileImageUrl);
 
+        //if the login is via an invite url, add the invitee to the rsvp table
+        //check for rsvp in database
+        if (vm.EventId is not null)
+        {
+            var foundRSVP = await _context
+                .RSVPs.Include(r => r.Event)
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.EventId == vm.EventId && r.UserId == newUser.Id);
+
+            //populate viewmodel and return view
+
+            if (foundRSVP == null)
+            {
+                var newRSVP = new RSVP
+                {
+                    EventId = vm.EventId ?? 0,
+                    AttendanceStatus = "No Response",
+                    UserId = newUser.Id,
+                    RespondedAt = DateTime.UtcNow,
+                };
+                await _context.RSVPs.AddAsync(newRSVP);
+                await _context.SaveChangesAsync();
+            }
+        }
         // Redirects to Home or Dashboard
         return RedirectToAction(nameof(Profile));
     }
@@ -267,9 +291,9 @@ public class AccountController : Controller
     }
 
     [HttpGet("login")]
-    public IActionResult LoginForm(string? error)
+    public IActionResult LoginForm(string? error, int? eventId)
     {
-        var loginFormViewModel = new LoginFormViewModel { Error = error };
+        var loginFormViewModel = new LoginFormViewModel { Error = error, EventId = eventId };
         return View(loginFormViewModel);
     }
 
@@ -336,6 +360,30 @@ public class AccountController : Controller
 
         HttpContext.Session.SetString("ProfileImage", profileImageUrl);
 
+        //if the login is via an invite url, add the invitee to the rsvp table
+        //check for rsvp in database
+        if (vm.EventId is not null)
+        {
+            var foundRSVP = await _context
+                .RSVPs.Include(r => r.Event)
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.EventId == vm.EventId && r.UserId == maybeUser.Id);
+
+            //populate viewmodel and return view
+
+            if (foundRSVP == null)
+            {
+                var newRSVP = new RSVP
+                {
+                    EventId = vm.EventId ?? 0,
+                    AttendanceStatus = "No Response",
+                    UserId = maybeUser.Id,
+                    RespondedAt = DateTime.UtcNow,
+                };
+                await _context.RSVPs.AddAsync(newRSVP);
+                await _context.SaveChangesAsync();
+            }
+        }
         // Redirects to Home or Dashboard
         return RedirectToAction(nameof(Profile));
     }

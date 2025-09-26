@@ -5,6 +5,8 @@
 @{
     ViewData["Title"] = "Log In";
     var error = Model.Error;
+    
+
 }
 
 @if (error is not null)
@@ -14,6 +16,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
 
 <style>
     .login-page {
@@ -100,6 +103,7 @@
         <div class="login-right">
             <h3 class="mb-4">Login</h3>
             <form asp-action="LoginForm" asp-controller="Account" method="post">
+                <input type="hidden" asp-for="EventId" />
                 <div class="form-group mb-3">
                     <label asp-for="Email">Email</label>
                     <input asp-for="Email" class="form-control" />
@@ -115,7 +119,7 @@
 
             <hr class="my-4" />
             <p class="text-center">Don’t have an account?</p>
-            <a href="/Account/Register" class="btn btn-outline-secondary w-100">Create New Account</a>
+            <a href="@(Model.EventId.HasValue ? $"/Account/Register?eventId={Model.EventId}" : "/Account/Register")"  class="btn btn-outline-secondary w-100">Create New Account</a>
         </div>
     </div>
 </div>

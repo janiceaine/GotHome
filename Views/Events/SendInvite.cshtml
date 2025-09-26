@@ -1,0 +1,40 @@
+@model RSVPFormViewModel
+
+<div class="card shadow my-4">
+    <div class="card-header">
+        <h2 class="display-6 m-0">Send Invites</h2>
+    </div>
+    <div class="card-body">
+        <p>@Model.EventName</p>
+        <form >
+           
+            <div class="d-flex flex-column">
+               <label id="linkUrl" class="form-label">https://127.0.0.1:7031/account/login?eventId=@Model.Id</label>
+                <button type="button"  class="btn btn-primary" onclick="copyLabelText()">Copy Invite Link</button>
+                <span id="message"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    function copyLabelText() {
+        // Get the label element
+        const label = document.getElementById('linkUrl');
+        const result = document.getElementById('message');
+        if (!label) return;
+
+        // Copy its text to the clipboard
+        navigator.clipboard.writeText(label.innerText)
+            .then(() => {
+                
+                result.innerText='Copied to clipboard!';
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+                result.innerText='Failed to copy';
+            });
+    }
+</script>
+}

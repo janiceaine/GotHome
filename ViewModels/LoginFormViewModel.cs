@@ -19,4 +19,6 @@ public class LoginFormViewModel
     public string Password { get; set; } = string.Empty;
 
     public string? Error { get; set; }
+
+    public int? EventId { get; set; }
 }
