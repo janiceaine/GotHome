@@ -385,7 +385,7 @@ public class AccountController : Controller
             }
         }
         // Redirects to Home or Dashboard
-        return RedirectToAction(nameof(Profile));
+        return RedirectToAction(nameof(EventsController.EventsIndex), "Events");
     }
 
     [HttpGet("logout")]

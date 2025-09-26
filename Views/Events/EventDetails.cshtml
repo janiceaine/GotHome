@@ -72,14 +72,7 @@
         <h5>Live Tracking</h5>
         @if (Model.LocationPings.Any())
         {
-            <ul>
-                @foreach (var p in Model.LocationPings)
-                {
-                    <li>
-                        @p.UserName (@p.Latitude, @p.Longitude) at @p.Timestamp.ToString("g")
-                    </li>
-                }
-            </ul>
+           <a class="btn btn-primary">Start Tracking</a>
         }
         else
         {
