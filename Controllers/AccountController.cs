@@ -106,6 +106,9 @@ public class AccountController : Controller
         var user = await _context
             .Users.AsNoTracking()
             .Include((u) => u.Profile)
+            .Include((u) => u.Events)
+            .Include((u) => u.RSVPs)
+            .Include((u) => u.SentInvites)
             .FirstOrDefaultAsync((u) => u.Id == uid);
 
         if (user is null)
@@ -137,6 +140,9 @@ public class AccountController : Controller
             Location = user.Profile!.Location,
             ProfileImageUrl = user.Profile!.ProfileImageUrl,
             UserId = user.Id,
+            EventsCreated = user.Events.Count(),
+            RSVPsCount = user.RSVPs.Count(),
+            InvitesSent = user.SentInvites.Count,
         };
 
         var profileFormViewModel = new ProfileFormViewModel { UserId = user.Id };
@@ -239,6 +245,8 @@ public class AccountController : Controller
         if (vm.ProfileImage is not null)
         {
             profile.ProfileImageUrl = await _images.UploadImageAsync(vm.ProfileImage);
+
+            HttpContext.Session.SetString("ProfileImage", profile.ProfileImageUrl);
         }
 
         // Step 4: Update other profile fields and save
@@ -314,9 +322,11 @@ public class AccountController : Controller
         HttpContext.Session.SetInt32(SessionUserId, maybeUser.Id);
         HttpContext.Session.SetString("UserName", maybeUser.UserName);
 
-        Console.WriteLine("******************************");
-        Console.WriteLine(maybeUser.Profile?.ProfileImageUrl);
-        var profileImageUrl = maybeUser.Profile?.ProfileImageUrl;
+        // Console.WriteLine("******************************");
+        // Console.WriteLine(maybeUser.Profile?.ProfileImageUrl);
+        var profileImageUrl =
+            maybeUser.Profile?.ProfileImageUrl
+            ?? "https://ik.imagekit.io/Janice/default-image.jpg?updatedAt=1758640819082";
 
         HttpContext.Session.SetString("ProfileImage", profileImageUrl);
 
