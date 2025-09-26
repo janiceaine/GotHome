@@ -16,11 +16,11 @@
         <p><strong>Description:</strong> @Model.Description</p>
         <p><strong>Location:</strong> @Model.Location</p>
         <p><strong>Start Time:</strong> @Model.StartTime.ToString("MMMM dd, yyyy HH:mm")</p>
-        <p><strong>Uploaded By:</strong> @Model.UploadedBy</p>
+        <p><strong>Host:</strong> @Model.UploadedBy</p>
 
         <hr />
 
-        <h5>Invitees</h5>
+        @* <h5>Invitees</h5>
         @if (Model.Invites.Any())
         {
             <ul>
@@ -38,7 +38,7 @@
         else
         {
             <p>No invites yet.</p>
-        }
+        } *@
 
         <h5>RSVPs</h5>
         @if (Model.RSVPs.Any())
@@ -46,9 +46,9 @@
             <ul>
                 @foreach (var r in Model.RSVPs)
                 {
-                    if(r.UserId != currentUser){
+                    if(r.UserId != currentUser && r.AttendanceStatus!="Host"){
                     <li>@r.UserName (@r.RespondedAt.ToString("g")) @r.AttendanceStatus</li>
-                    }else{
+                    }else if(r.AttendanceStatus!="Host"){
                         <li>@r.UserName (@r.RespondedAt.ToString("g")) @r.AttendanceStatus <a href="/events/@Model.Id/rsvping" title="change my RSVP" class="btn btn-sm btn-primary">Change</a></li>
                     }
                 }
@@ -59,7 +59,7 @@
             <p>No RSVPs yet. <a href="/events/@Model.Id/rsvping" title="change my RSVP" class="btn btn-sm btn-primary">RSVP</a></p>
         }
 
-        <h5>Location Pings</h5>
+        <h5>Live Tracking</h5>
         @if (Model.LocationPings.Any())
         {
             <ul>
@@ -73,7 +73,7 @@
         }
         else
         {
-            <p>No location pings yet.</p>
+            <p>Not active</p>
         }
     </div>
 </div>

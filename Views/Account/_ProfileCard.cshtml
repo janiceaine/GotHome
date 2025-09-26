@@ -139,7 +139,7 @@
 
         <div class="info">
             <p><strong>Email:</strong> @profile.Email</p>
-            <p><strong>Location:</strong> @(profile.Location ?? "Not specified")</p>
+            <p><strong>Home Address:</strong> @(profile.Location ?? "Not specified")</p>
             <p><strong>Joined:</strong> @profile.JoinDate</p>
         </div>
 
@@ -152,10 +152,10 @@
                 <h3>@profile.RSVPsCount</h3>
                 <p>RSVPs</p>
             </div>
-            <div class="stat">
+            @* <div class="stat">
                 <h3>@profile.InvitesSent</h3>
                 <p>Invites Sent</p>
-            </div>
+            </div> *@
         </div>
 
         <a href="/account/profile/update/@profile.UserId" class="btn-edit">Edit Profile</a>

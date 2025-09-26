@@ -18,7 +18,7 @@ public class EventsController : Controller
         _config = config;
     }
 
-    // View all Events
+    // View all Events for a user
     [HttpGet]
     public async Task<IActionResult> EventsIndex()
     {
@@ -37,6 +37,8 @@ public class EventsController : Controller
                 .Events.AsNoTracking()
                 .Include(e => e.Invites)
                 .Include(e => e.User)
+                .Include(e => e.RSVPs)
+                .Where(e => e.RSVPs.Any(r => r.UserId == uid))
                 .OrderByDescending(e => e.CreatedAt) // Show newest first
                 .Select(e => new EventsRowViewModel
                 {
@@ -111,6 +113,16 @@ public class EventsController : Controller
         await _context.Events.AddAsync(newEvent);
         await _context.SaveChangesAsync();
 
+        //add host to the rsvp table
+        var newRSVP = new RSVP
+        {
+            EventId = newEvent.Id,
+            AttendanceStatus = "Host",
+            UserId = userId.Value,
+            RespondedAt = DateTime.UtcNow,
+        };
+        await _context.RSVPs.AddAsync(newRSVP);
+        await _context.SaveChangesAsync();
         TempData["ToastMessage"] = "🎉 Event created!";
         return RedirectToAction(nameof(EventDetails), new { id = newEvent.Id });
     }
@@ -419,83 +431,6 @@ public class EventsController : Controller
         TempData["ToastMessage"] = "Event deleted!";
         return RedirectToAction(nameof(EventsIndex));
     }
-
-    // [HttpPost("{id}/rsvp")]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> RSVPFormProcess(int id, RSVPFormViewModel rVM)
-    // {
-    //     var userId = HttpContext.Session.GetInt32(SessionUserId);
-    //     if (userId is null)
-    //     {
-    //         return RedirectToAction(
-    //             nameof(AccountController.LoginForm),
-    //             "Account",
-    //             new { message = "not-authenticated" }
-    //         );
-    //     }
-
-    //     //jwprotected view
-    //     // Prevent duplicate RSVP
-    //     var alreadyRSVPed = await _context.RSVPs.AnyAsync(r =>
-    //         r.EventId == id && r.UserId == userId
-    //     );
-
-    //     //validate input
-    //     if (!ModelState.IsValid)
-    //     {
-    //         //check for movie in database
-    //         var foundJoke = await _context
-    //             .Jokes.Include(j => j.User)
-    //             .Include(j => j.Groans)
-    //             .ThenInclude(g => g.User)
-    //             .AsNoTracking()
-    //             .FirstOrDefaultAsync(j => j.Id == id);
-
-    //         if (foundJoke == null)
-    //         {
-    //             _logger.LogWarning($"Joke with the id {id} was not found");
-    //             return StatusCode(404);
-    //         }
-
-    //         var vm = new JokeDetailsViewModel
-    //         {
-    //             Id = foundJoke.Id,
-    //             Setup = foundJoke.Setup,
-    //             Punchline = foundJoke.Punchline,
-    //             Username = foundJoke.User!.Username,
-    //             ModifiedAt = foundJoke.ModifiedAt,
-    //             UserId = foundJoke.userId,
-    //             GroanCount = foundJoke.Groans.Count,
-    //             AverageGroans =
-    //                 foundJoke.Groans.Count > 0
-    //                     ? Math.Round(foundJoke.Groans.Average(r => r.UserGroanValue), 1)
-    //                     : 0.0,
-    //             Groaners = foundJoke.Groans.Select(g => g.User!.Username).ToList(),
-    //             GroansNewFormViewModel = gVM,
-    //         };
-
-    //         TempData["ToastMessage"] = "✅ RSVP confirmed!";
-    //         return RedirectToAction(nameof(EventDetails), new { id });
-    //         return View(nameof(JokeDetails), vm);
-    //     }
-
-    //     //check for ratings in database
-    //     var alreadyGroaned = await _context.Groans.AnyAsync(r => r.JokeId == id && r.UserId == uid);
-    //     if (!alreadyGroaned)
-    //     {
-    //         var newRating = new Groan
-    //         {
-    //             UserId = uid,
-    //             JokeId = id,
-    //             UserGroanValue = gVM.UserGroanLevel,
-    //         };
-    //         _logger.LogInformation("Created a new groan in database.");
-
-    //         await _context.Groans.AddAsync(newRating);
-    //         await _context.SaveChangesAsync();
-    //     }
-    //     return RedirectToAction(nameof(JokeDetails), new { id });
-    // }
 
     [HttpGet("{id}/rsvping")]
     public async Task<IActionResult> EditRSVPForm(int id)

@@ -11,4 +11,7 @@ public class EventsRowViewModel
     public DateTime StartTime { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string CreateDate { get; set; } = string.Empty;
+
+    public int? RSVP { get; set; }
+    public int RSVPCount { get; set; }
 }
