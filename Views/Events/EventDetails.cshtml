@@ -42,7 +42,7 @@
             <ul>
                 @foreach (var r in Model.RSVPs)
                 {
-                    <li>@r.UserName (@r.Timestamp.ToString("g"))</li>
+                    <li>@r.UserName (@r.RespondedAt.ToString("g"))</li>
                 }
             </ul>
         }

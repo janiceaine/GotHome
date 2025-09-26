@@ -12,7 +12,7 @@ public class RSVP
     public int UserId { get; set; }
     public User? User { get; set; }
 
-    public DateTime Timestamp { get; set; }
     public bool IsAttending { get; set; }
     public DateTime RespondedAt { get; set; } = DateTime.UtcNow;
+    public string AttendanceStatus { get; set; } = string.Empty;
 }
