@@ -70,3 +70,9 @@ a:focus {
   text-decoration: underline;
 }
 
+.card {
+  background-color: rgb(27, 33, 38);
+  color: #f5f5f5;
+
+}
+
