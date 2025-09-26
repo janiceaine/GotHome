@@ -1,0 +1,23 @@
+@model LocationIndexViewModel
+@{
+  var locations = Model.LocationPings;
+}
+<table class="table table-striped table-hover table-bordered border-dark">
+  <thead >
+    <tr class="table-secondary table-bordered border-dark">
+      <th scope="col">Attendee</th>
+      <th scope="col">Status</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    
+@foreach(var location in locations){
+ <tr>
+ <td>@location.Profile!.FullName</td>
+ <td>@location.LocationStatus</td>
+ 
+ </tr>
+}
+</tbody>
+</table>

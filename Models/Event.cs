@@ -22,6 +22,7 @@ public class Event
     public DateTime StartTime { get; set; }
 
     public bool IsWrappedUp { get; set; } = false;
+    public bool IsLiveTracking { get; set; } = false;
 
     [Required]
     public int UserId { get; set; }

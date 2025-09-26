@@ -24,4 +24,7 @@ public class EventDetailsViewModel
     public List<InviteViewModel> Invites { get; set; } = [];
     public List<RSVPViewModel> RSVPs { get; set; } = [];
     public List<LocationPingViewModel> LocationPings { get; set; } = [];
+
+    public bool IsWrappedUp { get; set; } = false;
+    public bool IsLiveTracking { get; set; } = false;
 }

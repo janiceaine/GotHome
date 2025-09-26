@@ -37,6 +37,9 @@ namespace GotHome.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsLiveTracking")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("IsWrappedUp")
                         .HasColumnType("tinyint(1)");
 
@@ -114,8 +117,15 @@ namespace GotHome.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsHost")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<double>("Latitude")
                         .HasColumnType("double");
+
+                    b.Property<string>("LocationStatus")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<double>("Longitude")
                         .HasColumnType("double");

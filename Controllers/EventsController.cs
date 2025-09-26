@@ -113,6 +113,18 @@ public class EventsController : Controller
         await _context.Events.AddAsync(newEvent);
         await _context.SaveChangesAsync();
 
+        //add host to the location table
+        var newLocationPing = new LocationPing
+        {
+            EventId = newEvent.Id,
+            UserId = userId.Value,
+            Timestamp = DateTime.UtcNow,
+            LocationStatus = "Inactive",
+            IsHost = true,
+        };
+        await _context.LocationPings.AddAsync(newLocationPing);
+        await _context.SaveChangesAsync();
+
         //add host to the rsvp table
         var newRSVP = new RSVP
         {
@@ -181,7 +193,7 @@ public class EventsController : Controller
                 .LocationPings.OrderByDescending(p => p.Timestamp)
                 .Select(p => new LocationPingViewModel
                 {
-                    UserName = p.User?.UserName ?? "Unknown",
+                    UserId = p.UserId,
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
                     Timestamp = p.Timestamp,

@@ -14,4 +14,6 @@ public class EventsRowViewModel
 
     public int? RSVP { get; set; }
     public int RSVPCount { get; set; }
+    public bool IsWrappedUp { get; set; } = false;
+    public bool IsLiveTracking { get; set; } = false;
 }
