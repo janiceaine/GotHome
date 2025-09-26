@@ -298,7 +298,10 @@ public class AccountController : Controller
         if (maybeUser is null)
         {
             // manually adding error to model state
-            ModelState.AddModelError("", "Email not found. Please check and try again.");
+            ModelState.AddModelError(
+                "",
+                "Credentials could not be authenticated. Please check and try again."
+            );
             return View(nameof(LoginForm), vm);
         }
 
@@ -306,7 +309,10 @@ public class AccountController : Controller
         if (!_passwords.Verify(vm.Password, maybeUser.PasswordHash))
         {
             // manually adding error to model state
-            ModelState.AddModelError("", "Incorrect password. Please try again.");
+            ModelState.AddModelError(
+                "",
+                "Credentials could not be authenticated. Please try again."
+            );
             return View(nameof(LoginForm), vm);
         }
 

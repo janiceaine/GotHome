@@ -1,5 +1,9 @@
 @model EventDetailsViewModel
-
+@{
+    
+    var currentUser =Context.Session.GetInt32("userId");
+  
+}
 <div class="card shadow my-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h2 class="display-6 m-0">@Model.Title</h2>
@@ -42,13 +46,17 @@
             <ul>
                 @foreach (var r in Model.RSVPs)
                 {
-                    <li>@r.UserName (@r.RespondedAt.ToString("g"))</li>
+                    if(r.UserId != currentUser){
+                    <li>@r.UserName (@r.RespondedAt.ToString("g")) @r.AttendanceStatus</li>
+                    }else{
+                        <li>@r.UserName (@r.RespondedAt.ToString("g")) @r.AttendanceStatus <a href="/events/@Model.Id/rsvping" title="change my RSVP" class="btn btn-sm btn-primary">Change</a></li>
+                    }
                 }
             </ul>
         }
         else
         {
-            <p>No RSVPs yet.</p>
+            <p>No RSVPs yet. <a href="/events/@Model.Id/rsvping" title="change my RSVP" class="btn btn-sm btn-primary">RSVP</a></p>
         }
 
         <h5>Location Pings</h5>

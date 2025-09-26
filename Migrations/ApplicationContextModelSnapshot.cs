@@ -215,9 +215,6 @@ namespace GotHome.Migrations
                     b.Property<DateTime>("RespondedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 

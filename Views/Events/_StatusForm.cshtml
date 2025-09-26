@@ -1,0 +1,26 @@
+@model NewRSVPFormViewModel
+@{
+  var statusForm = Model;
+}
+            <form 
+            asp-action="GroanFormProcess" 
+            asp-controller="Event" 
+            method="post" 
+            asp-route-id="@statusForm.EventId">
+              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+              <label asp-for="UserAttendanceValue" class="form-label fw-bold">Are you attending:</label>
+              <select asp-for="UserAttendanceValue" class="form-select">
+               <option value="No Response">""</option>
+              <option value="Confirmed Attending">yes</option>
+              <option value="Not Attending">no</option>
+              <option value="Possibly Attending">maybe</option>
+              </select>
+              <span asp-validation-for="UserAttendanceValue" class="text-danger"></span>
+            </div>
+            <div class="text-end">
+                    <button class="btn btn-danger" type="submit">RSVP</button>
+            </div>
+                    </form>
+          
+          

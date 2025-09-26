@@ -159,6 +159,8 @@ public class EventsController : Controller
                 {
                     UserName = r.User?.UserName ?? "Unknown",
                     RespondedAt = r.RespondedAt,
+                    AttendanceStatus = r.AttendanceStatus ?? "No response",
+                    UserId = r.UserId,
                 })
                 .ToList(),
 
@@ -254,42 +256,6 @@ public class EventsController : Controller
         await _context.SaveChangesAsync();
 
         TempData["ToastMessage"] = "Event updated!";
-        return RedirectToAction(nameof(EventDetails), new { id });
-    }
-
-    [HttpPost("{id}/rsvp")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RSVP(int id)
-    {
-        var userId = HttpContext.Session.GetInt32(SessionUserId);
-        if (userId is null)
-        {
-            return RedirectToAction(
-                nameof(AccountController.LoginForm),
-                "Account",
-                new { message = "not-authenticated" }
-            );
-        }
-
-        // Prevent duplicate RSVP
-        var alreadyRSVPed = await _context.RSVPs.AnyAsync(r =>
-            r.EventId == id && r.UserId == userId
-        );
-
-        if (!alreadyRSVPed)
-        {
-            _context.RSVPs.Add(
-                new RSVP
-                {
-                    EventId = id,
-                    UserId = userId.Value,
-                    RespondedAt = DateTime.UtcNow,
-                }
-            );
-            await _context.SaveChangesAsync();
-        }
-
-        TempData["ToastMessage"] = "✅ RSVP confirmed!";
         return RedirectToAction(nameof(EventDetails), new { id });
     }
 
@@ -452,5 +418,164 @@ public class EventsController : Controller
 
         TempData["ToastMessage"] = "Event deleted!";
         return RedirectToAction(nameof(EventsIndex));
+    }
+
+    // [HttpPost("{id}/rsvp")]
+    // [ValidateAntiForgeryToken]
+    // public async Task<IActionResult> RSVPFormProcess(int id, RSVPFormViewModel rVM)
+    // {
+    //     var userId = HttpContext.Session.GetInt32(SessionUserId);
+    //     if (userId is null)
+    //     {
+    //         return RedirectToAction(
+    //             nameof(AccountController.LoginForm),
+    //             "Account",
+    //             new { message = "not-authenticated" }
+    //         );
+    //     }
+
+    //     //jwprotected view
+    //     // Prevent duplicate RSVP
+    //     var alreadyRSVPed = await _context.RSVPs.AnyAsync(r =>
+    //         r.EventId == id && r.UserId == userId
+    //     );
+
+    //     //validate input
+    //     if (!ModelState.IsValid)
+    //     {
+    //         //check for movie in database
+    //         var foundJoke = await _context
+    //             .Jokes.Include(j => j.User)
+    //             .Include(j => j.Groans)
+    //             .ThenInclude(g => g.User)
+    //             .AsNoTracking()
+    //             .FirstOrDefaultAsync(j => j.Id == id);
+
+    //         if (foundJoke == null)
+    //         {
+    //             _logger.LogWarning($"Joke with the id {id} was not found");
+    //             return StatusCode(404);
+    //         }
+
+    //         var vm = new JokeDetailsViewModel
+    //         {
+    //             Id = foundJoke.Id,
+    //             Setup = foundJoke.Setup,
+    //             Punchline = foundJoke.Punchline,
+    //             Username = foundJoke.User!.Username,
+    //             ModifiedAt = foundJoke.ModifiedAt,
+    //             UserId = foundJoke.userId,
+    //             GroanCount = foundJoke.Groans.Count,
+    //             AverageGroans =
+    //                 foundJoke.Groans.Count > 0
+    //                     ? Math.Round(foundJoke.Groans.Average(r => r.UserGroanValue), 1)
+    //                     : 0.0,
+    //             Groaners = foundJoke.Groans.Select(g => g.User!.Username).ToList(),
+    //             GroansNewFormViewModel = gVM,
+    //         };
+
+    //         TempData["ToastMessage"] = "✅ RSVP confirmed!";
+    //         return RedirectToAction(nameof(EventDetails), new { id });
+    //         return View(nameof(JokeDetails), vm);
+    //     }
+
+    //     //check for ratings in database
+    //     var alreadyGroaned = await _context.Groans.AnyAsync(r => r.JokeId == id && r.UserId == uid);
+    //     if (!alreadyGroaned)
+    //     {
+    //         var newRating = new Groan
+    //         {
+    //             UserId = uid,
+    //             JokeId = id,
+    //             UserGroanValue = gVM.UserGroanLevel,
+    //         };
+    //         _logger.LogInformation("Created a new groan in database.");
+
+    //         await _context.Groans.AddAsync(newRating);
+    //         await _context.SaveChangesAsync();
+    //     }
+    //     return RedirectToAction(nameof(JokeDetails), new { id });
+    // }
+
+    [HttpGet("{id}/rsvping")]
+    public async Task<IActionResult> EditRSVPForm(int id)
+    {
+        //protected view
+        var userId = HttpContext.Session.GetInt32(SessionUserId);
+        if (userId is not int uid)
+        {
+            return StatusCode(401);
+        }
+
+        //check for rsvp in database
+        var foundRSVP = await _context
+            .RSVPs.Include(r => r.Event)
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r => r.EventId == id && r.UserId == uid);
+
+        //populate viewmodel and return view
+
+        if (foundRSVP == null)
+        {
+            var newRSVP = new RSVP
+            {
+                EventId = id,
+                AttendanceStatus = "No Response",
+                UserId = uid,
+                RespondedAt = DateTime.UtcNow,
+            };
+            await _context.RSVPs.AddAsync(newRSVP);
+            await _context.SaveChangesAsync();
+
+            foundRSVP = await _context
+                .RSVPs.AsNoTracking()
+                .Include(r => r.Event)
+                .Include(r => r.User)
+                .FirstOrDefaultAsync(r => r.EventId == id && r.UserId == uid);
+        }
+        var foundRSVPValue = foundRSVP!.AttendanceStatus;
+        var vm = new RSVPFormViewModel
+        {
+            Id = foundRSVP.EventId,
+            RSVPAttendanceStatus = foundRSVPValue,
+            UserId = foundRSVP.UserId,
+            EventName = foundRSVP.Event!.Title,
+        };
+
+        return View(vm);
+    }
+
+    [HttpPost("{id}/rsvping")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditRSVPFormProcess(int id, RSVPFormViewModel vm)
+    {
+        //protected view
+        var userId = HttpContext.Session.GetInt32(SessionUserId);
+        if (userId is not int uid)
+        {
+            return StatusCode(401);
+        }
+
+        //validate input
+        if (!ModelState.IsValid)
+        {
+            return View(nameof(RSVPFormViewModel), vm);
+        }
+        //check for groan in database
+        var foundRSVP = await _context
+            .RSVPs.Include(r => r.Event)
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r => r.EventId == id & r.UserId == uid);
+        if (foundRSVP == null)
+        {
+            return StatusCode(404);
+        }
+
+        foundRSVP.AttendanceStatus = vm.RSVPAttendanceStatus ?? "No response";
+        foundRSVP.RespondedAt = DateTime.UtcNow;
+        _context.Update(foundRSVP);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(EventDetails), new { id = foundRSVP.EventId });
     }
 }

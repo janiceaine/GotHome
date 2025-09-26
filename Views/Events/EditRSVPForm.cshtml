@@ -1,0 +1,34 @@
+@model RSVPFormViewModel
+@{
+  ViewData["Title"]="Edit My RSVP";
+  var rsvp = Model;
+}
+<h1>Edit My RSVP</h1>
+<h4 class="fw-light">@rsvp.EventName</h4>
+<div class="card shadow">
+  <div class="card-body">
+    <form 
+    asp-action="EditRSVPFormProcess" 
+    asp-controller="Events" 
+    method="post" 
+    asp-route-id="@rsvp.Id">
+      <input type="hidden" asp-for="Id" value="@rsvp.Id">
+      <input type="hidden" asp-for="UserId" value="@rsvp.Id">
+      <span asp-validation-summary="Model Only" class="text-danger"></span>
+      
+      <div class="mb-3">
+              <label asp-for="RSVPAttendanceStatus">Are you coming?</label>
+              <select asp-for="RSVPAttendanceStatus" class="form-select">
+              <option value="Confirmed Attending">yes</option>
+              <option value="Not Going">no</option>
+              <option value="Possibly Attending">maybe</option>
+              </select>
+              <span asp-validation-for="RSVPAttendanceStatus" class="text-danger"></span>
+            </div>
+      <div class="text-end">
+        <a href="/events/@rsvp.Id" class="btn btn-outline-primary">Cancel</a>
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
